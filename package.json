@@ -6,7 +6,6 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "postinstall": "gulp build",
     "release": "gulp release",
     "build": "gulp",
     "test": "gulp test",
