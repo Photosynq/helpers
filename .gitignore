@@ -1,7 +1,6 @@
 # Folders #
 ###########
-dist/
-docs/
+docs/*
 node_modules/
 .vscode/
 
@@ -28,3 +27,4 @@ desktop.ini
 # Others #
 ##########
 package-lock.json
+!docs/documentation.md
