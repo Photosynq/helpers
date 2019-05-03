@@ -1,0 +1,22 @@
+{
+  "name": "photosynq-helpers",
+  "version": "1.0.0",
+  "description": "Available Math and Array functions to Macros/Protocols on PhotosynQ",
+  "author": "PhotosynQ <support@photosynq.org>",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "gulp build",
+    "release": "gulp release",
+    "build": "gulp",
+    "test": "gulp test",
+    "docs": "gulp docs"
+  },
+  "devDependencies": {
+    "documentation": "^10.1.0",
+    "fs-jetpack": "^2.2.2",
+    "gulp": "^4.0.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-mocha": "^6.0.0"
+  }
+}
