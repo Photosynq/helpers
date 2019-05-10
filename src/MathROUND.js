@@ -12,7 +12,7 @@ function MathROUND(value, digets) {
 	digets = typeof digets !== 'undefined' ? digets : 2;
 	var val = false;
 
-	if (value === null || typeof value == 'object' || value == '') {
+	if (value === null || typeof value == 'object' || value === '') {
 		return parseFloat(val);
 	}
 
