@@ -2,7 +2,7 @@
 
 These preset functions allow PhotosynQ Users to develop new Macros for evaluating their measurements easier and faster. This not only includes function to perform standard calculations like **mean** or find the **maximum** or **minimum**, but linear and non-linear regressions and functions to transform arrays.
 
-Please see the documentation: <https://help.photosynq.org/#/macros/provided-functions>
+Please see the documentation: <https://help.photosynq.org/macros/provided-functions>
 
 ## Install
 
