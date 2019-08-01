@@ -6,8 +6,8 @@
  * @access public
  * @param {object} data Data for the non-linear regression needs to be provided as an array of x,y pairs. `[[x1,y1], [x2,y2], ..., [xn,yn]]`
  * @param {object} options
- * @param {string} options.equation Formula for the function to be fitted
- * @param {number[]} options.initial Array with the initial guesses for parameters in equation
+ * @param {(string|function)} options.equation Select preset equation (string) or supply function
+ * @param {number[]} options.initial Array with the initial guesses for parameters in equation [a, b, ..., h]
  * @param {number} [options.iterations=200] Number of iterations (maximum 2000)
  * @param {number} [options.cPts] Number of datapoints
  * @param {number} options.cVar Number of independant variables
@@ -29,14 +29,14 @@
  * @returns {object}
  * @example NonLinearRegression(
  *  [
- *    [x1,y1],
- *    [x2,y2],
- *    ...,
- *    [xn,yn]
+ * 	  [x1, y1],
+ * 	  [x2, y2],
+ * 	  ...,
+ * 	  [xn, yn]
  *  ],
  *  {
- * 	  equation: "",
- * 	  initial: [a, b, ..., h]
+ * 	  equation: "b + a * e(- x / c)",
+ * 	  initial: [a, b, c]
  *  }
  * )
  *
@@ -65,6 +65,31 @@
  * //   iterations: <number>,
  * //   RMS_errors: <array>
  * // }
+ * 
+ * @example // Use a custom fitting function
+ * // The function can contain the following parameters:
+ * // x, t, a, b, c, .. h
+ * // Not all parameters have to be defined and they can
+ * // be in a random order. Use parameter names in alphabetical
+ * // order (e.g. a and b, a and c without b will not work)
+ * var decay = function(x,a,b,c){
+ *	return b + a * Math.exp( -x / c );
+ * };
+ * 
+ * NonLinearRegression(
+ *  [
+ * 	  [x1, y1],
+ * 	  [x2, y2],
+ * 	  ...,
+ * 	  [xn, yn]
+ *  ],
+ *  {
+ * 	  equation: decay,
+ * 	  initial: [a, b, c]
+ *  }
+ * )
+ * // The returned object has the same structure as object in
+ * // in the previous example.
  */
 
 function NonLinearRegression(data, options) {
@@ -333,6 +358,38 @@ function NonLinearRegression(data, options) {
 			return ( c + a / ( 1 + b / x ) );
 		if (eqtn == '( c + a * a / ( 1 + b / x ) )')
 			return ( c + a * a / ( 1 + b / x ) );
+		if (typeof eqtn == 'function'){
+			var args = eqtn.toString().match(/function\s{0,}.*?\(([^)]*)\)/)[1];			
+			args = args.split(',').map(function(arg) {
+				return arg.replace(/\/\*.*\*\//, '').trim();
+			}).filter(function(arg) {
+				return arg;
+			});
+			var args_pass = [];
+			for(var arg in args){
+				if( args[arg] == 'a')
+					args_pass.push(a);
+				if( args[arg] == 'b')
+					args_pass.push(b);
+				if( args[arg] == 'c')
+					args_pass.push(c);
+				if( args[arg] == 'd')
+					args_pass.push(d);
+				if( args[arg] == 'e')
+					args_pass.push(e);
+				if( args[arg] == 'f')
+					args_pass.push(f);
+				if( args[arg] == 'g')
+					args_pass.push(g);
+				if( args[arg] == 'h')
+					args_pass.push(h);
+				if( args[arg] == 'x')
+					args_pass.push(x);
+				if( args[arg] == 't')
+					args_pass.push(t);
+			}
+			return eqtn.apply(null,args_pass);
+		}
 		return null;
 	}
 
