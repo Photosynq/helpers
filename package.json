@@ -12,10 +12,10 @@
     "docs": "gulp docs"
   },
   "devDependencies": {
-    "documentation": "^11.0.0",
-    "fs-jetpack": "^2.2.2",
+    "documentation": "^12.1.4",
+    "fs-jetpack": "^2.2.3",
     "gulp": "^4.0.2",
     "gulp-minify": "^3.1.0",
-    "gulp-mocha": "^6.0.0"
+    "gulp-mocha": "^7.0.2"
   }
 }
