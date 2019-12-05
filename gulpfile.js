@@ -24,7 +24,7 @@ function build(done) {
         if(files[file].type != 'file')
             continue;
         content = jetpack.read( jetpack.path('./src', files[file].name ) );
-        content = content.replace(/\s{0,}module\.exports\s{0,}=\s{0,}\w*;?/ig,'');
+        content = content.replace(/\s{0,}module\.exports(\.\w*)?\s{0,}=\s{0,}\w*;?/ig,'');
         content = content.replace(/\s{0,}(const|let|var)\s{0,}\w*\s{0,}=\s{0,}require\(([\w\/\.\"\']+)\);?/gi,'');
         jetpack.append('./dist/math.js', content );
     }
