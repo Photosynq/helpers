@@ -26,5 +26,4 @@ desktop.ini
 
 # Others #
 ##########
-package-lock.json
 !docs/documentation.md
