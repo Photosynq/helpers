@@ -733,8 +733,6 @@ function info(msg, output) {
 	output.messages.info.push(msg);
 }
 
-module.exports.info = info;
-
 /**
  * Add an Warning Message for the User.
  * Use these messages to indicate a potential issue and direct the user to check the measurement again.
@@ -754,8 +752,6 @@ function warning(msg, output) {
 	output.messages.warning.push(msg);
 }
 
-module.exports.warning = warning;
-
 /**
  * Add an Danger Message for the User. These messages will be shown in the data viewer as well.
  * Use these messages to indicate a problematic issue that will most likely result in an invalid measurement.
@@ -774,8 +770,6 @@ function danger(msg, output) {
 		output.messages.danger = [];
 	output.messages.danger.push(msg);
 }
-
-module.exports.danger = danger;
 // Script modified based of the calculator found on http://statpages.info/nonlin.html
 
 /**
@@ -1473,8 +1467,6 @@ function MathMULTREG(input_raw) {
 
 }
 
-module.exports.MathMULTREG = MathMULTREG;
-
 /**
  * Fit exponential decay to Y = Y0 + Ae^(-x/t)
  * A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.
@@ -1587,8 +1579,6 @@ function MathEXPINVREG(input_raw) {
 	};
 }
 
-module.exports.MathEXPINVREG = MathEXPINVREG;
-
 /**
  * Polynomial fit to y = a0 + a1x + a2x^2 + a3x^3....
  * @access public
@@ -1643,8 +1633,6 @@ function MathPOLYREG(input_raw, degree) {
 
 }
 
-module.exports.MathPOLYREG = MathPOLYREG;
-
 // helper functions for the functions above
 
 //intended for vectors of equal size
@@ -1656,8 +1644,6 @@ function subVV(vec1, vec2) {
 
 	return ret;
 }
-
-module.exports.subVV = subVV;
 
 function proj(vec1, vec2) {
 	var denom = innerProd(vec1, vec1);
@@ -1672,8 +1658,6 @@ function proj(vec1, vec2) {
 	return vec3;
 }
 
-module.exports.proj = proj;
-
 function innerProd(vec1, vec2) {
 	if (vec1.length == vec2.length) {
 		var ans = 0;
@@ -1685,8 +1669,6 @@ function innerProd(vec1, vec2) {
 	}
 }
 
-module.exports.innerProd = innerProd;
-
 function normal(vec) {
 	var norm = 0;
 	for (var i = 0; i < vec.length; i++) {
@@ -1696,8 +1678,6 @@ function normal(vec) {
 
 	return norm;
 }
-
-module.exports.normal = normal;
 
 //source: http://www.learninglover.com/examples.php?id=79
 function QRDecomp(A) {
@@ -1774,8 +1754,6 @@ function QRDecomp(A) {
 	return decomp;
 }
 
-module.exports.QRDecomp = QRDecomp;
-
 //helper from numeric.js library
 function transpose(x) {
 	var i, j, m = x.length,
@@ -1815,8 +1793,6 @@ function transpose(x) {
 	return ret;
 }
 
-module.exports.transpose = transpose;
-
 function _getCol(A, j, x) {
 	var n = A.length,
 		i;
@@ -1827,8 +1803,6 @@ function _getCol(A, j, x) {
 	}
 	if (i === 0) x[0] = A[0][j];
 }
-
-module.exports._getCol = _getCol;
 
 function dotVV(x, y) {
 	var i, n = x.length,
@@ -1842,8 +1816,6 @@ function dotVV(x, y) {
 	}
 	return ret;
 }
-
-module.exports.dotVV = dotVV;
 
 function dotMMbig(x, y) {
 	var gc = _getCol,
@@ -1871,8 +1843,6 @@ function dotMMbig(x, y) {
 	return A;
 }
 
-module.exports.dotMMbig = dotMMbig;
-
 function _dim(x) {
 	var ret = [];
 	while (typeof x === "object") {
@@ -1881,8 +1851,6 @@ function _dim(x) {
 	}
 	return ret;
 }
-
-module.exports._dim = _dim;
 
 function dim(x) {
 	var y, z;
@@ -1900,8 +1868,6 @@ function dim(x) {
 	return [];
 }
 
-module.exports.dim = dim;
-
 function clone(input) {
 	var ret = [];
 	for (var i = 0; i < input.length; i++) {
@@ -1914,8 +1880,6 @@ function clone(input) {
 
 	return ret;
 }
-
-module.exports.clone = clone;
 
 function diag(d) {
 	var i, i1, j, n = d.length,
@@ -1944,8 +1908,6 @@ function diag(d) {
 	return A;
 }
 
-module.exports.diag = diag;
-
 function rep(s, v, k) {
 	if (typeof k === "undefined") {
 		k = 0;
@@ -1969,13 +1931,9 @@ function rep(s, v, k) {
 	return ret;
 }
 
-module.exports.rep = rep;
-
 function identity(n) {
 	return diag(rep([n], 1));
 }
-
-module.exports.identity = identity;
 
 function inv(x) {
 	var s = dim(x),
@@ -2024,8 +1982,6 @@ function inv(x) {
 	return I;
 }
 
-module.exports.inv = inv;
-
 function dotMV(x, y) {
 	var p = x.length,
 		i;
@@ -2036,8 +1992,6 @@ function dotMV(x, y) {
 	}
 	return ret;
 }
-
-module.exports.dotMV = dotMV;
 
 function dotVM(x, y) {
 	var j, k, p, q, ret, woo, i0;
@@ -2057,8 +2011,6 @@ function dotVM(x, y) {
 	}
 	return ret;
 }
-
-module.exports.dotVM = dotVM;
 
 function dotMMsmall(x, y) {
 	var i, j, k, p, q, r, ret, foo, bar, woo, i0;
@@ -2085,8 +2037,6 @@ function dotMMsmall(x, y) {
 	return ret;
 }
 
-module.exports.dotMMsmall = dotMMsmall;
-
 function mulVS(x, y) {
 	for (var i = 0; i < x.length; i++) {
 		x[i] = x[i] * y;
@@ -2095,8 +2045,6 @@ function mulVS(x, y) {
 	return x;
 }
 
-module.exports.mulVS = mulVS;
-
 function mulSV(x, y) {
 	for (var i = 0; i < y.length; i++) {
 		y[i] = y[i] * x;
@@ -2104,8 +2052,6 @@ function mulSV(x, y) {
 
 	return y;
 }
-
-module.exports.mulSV = mulSV;
 
 function dot(x, y) {
 	var d = dim;
@@ -2128,9 +2074,7 @@ function dot(x, y) {
 		default:
 			throw new Error('numeric.dot only works on vectors and matrices');
 	}
-}
-
-module.exports.dot = dot;/**
+}/**
  * Math.abs(x) returns the absolute value of x
  * @see {@link https://www.w3schools.com/jsref/jsref_abs.asp}
  * @access public
