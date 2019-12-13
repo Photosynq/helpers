@@ -345,7 +345,7 @@ function MathLOG(value) {
 	return parseFloat(val);
 }
 /**
- * Get the maximum value from an array of numbers. The function fails,
+ * Get the maximum value from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
@@ -369,7 +369,7 @@ function MathMAX(values) {
 	return parseFloat(max);
 }
 /**
- * Calculate the variance from an array of numbers. The function fails,
+ * Calculate the variance from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
@@ -397,7 +397,7 @@ function MathMEAN(values) {
 	return parseFloat(mean);
 }
 /**
- * Calculate the median from an array of numbers. The function fails,
+ * Calculate the median from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
@@ -442,7 +442,7 @@ function MathMEDIAN(values) {
 	return parseFloat(val);
 }
 /**
- * Get the minimum value from an array of numbers. The function fails,
+ * Get the minimum value from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
@@ -466,7 +466,7 @@ function MathMIN(values) {
 	return parseFloat(min);
 }
 /**
- * Calculate the variance from an array of numbers. The function fails, if the array is empty or has invalid values.
+ * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
  * @param {number} value
  * @param {number} [digets=2] number of digits
@@ -493,7 +493,7 @@ function MathROUND(value, digets) {
 	return parseFloat(val);
 }
 /**
- * Calculate the standard error from an array of numbers. The function fails, if the array is empty or has invalid values.
+ * Calculate the standard error from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
  * @returns {number}
@@ -544,7 +544,7 @@ function MathSTDERR(values) {
 	return parseFloat(stderr);
 }
 /**
- * Calculate the variance from an array of numbers. The function fails, if the array is empty or has invalid values.
+ * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
  * @returns {number}
@@ -595,7 +595,7 @@ function MathSTDEV(values) {
 	return parseFloat(stdev);
 }
 /**
- * Calculate the variance from an array of numbers. The function fails, if the array is empty or has invalid values.
+ * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
  * @returns {number}
@@ -646,7 +646,7 @@ function MathSTDEVS(values) {
 	return parseFloat(stdevs);
 }
 /**
- * Calculate the sum from an array of numbers. The function fails, if the array is empty or has invalid values.
+ * Calculate the sum from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
  * @returns {number}
@@ -670,7 +670,7 @@ function MathSUM(values) {
 	return parseFloat(sum);
 }
 /**
- * Calculate the variance from an array of numbers. The function fails, if the array is empty or has invalid values.
+ * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
  * @returns {number}
@@ -720,7 +720,7 @@ function MathVARIANCE(values) {
  * @access public
  * @param {string} msg Info Message
  * @param {object} output object that is returned at the end
- * @returns {object} pushes the message into the output object
+ * @returns {object} pushes the message into the output object.
  * @example info('Your Info Message', output);
  * // output['messages']['info']['Your Info Message']
  */
@@ -739,7 +739,7 @@ function info(msg, output) {
  * @access public
  * @param {string} msg Warning Message
  * @param {object} output object that is returned at the end
- * @returns {object} pushes the message into the output object
+ * @returns {object} pushes the message into the output object.
  * @example warning('Your Warning Message', output);
  * // output['messages']['warning']['Your Warning Message']
  */
@@ -753,12 +753,12 @@ function warning(msg, output) {
 }
 
 /**
- * Add an Danger Message for the User. These messages will be shown in the data viewer as well.
+ * Add a Danger Message for the User. These messages will be shown in the data viewer as well.
  * Use these messages to indicate a problematic issue that will most likely result in an invalid measurement.
  * @access public
  * @param {string} msg Danger Message
  * @param {object} output object that is returned at the end
- * @returns {object} pushes the message into the output object
+ * @returns {object} pushes the message into the output object.
  * @example danger('Your Danger Message', output);
  * // output['messages']['info']['Your Danger Message']
  */
@@ -1381,7 +1381,7 @@ function TransformTrace( fn, a1, a2 ) {
  * Multiple Linear Regression
  * @access public
  * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
- * @returns {object} Returns rsquared, slopes and points
+ * @returns {object} Returns rsquared, slopes and points.
  * @example MathEXPINVREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ] );
  * // returns
  * {
@@ -1472,7 +1472,7 @@ function MathMULTREG(input_raw) {
  * A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.
  * @access public
  * @param {array[]} input_raw Input x,y value pairs [ [x1,y1], [x2,y2], ..., [xn,yn] ].
- * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope
+ * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope.
  * @example MathEXPINVREG( [ [x1,y1], [x2,y2], ..., [xn,yn] ] );
  * // returns
  * {
@@ -2075,7 +2075,7 @@ function dot(x, y) {
 			throw new Error('numeric.dot only works on vectors and matrices');
 	}
 }/**
- * Math.abs(x) returns the absolute value of x
+ * Math.abs(x) returns the absolute value of x.
  * @see {@link https://www.w3schools.com/jsref/jsref_abs.asp}
  * @access public
  * @name Math.abs
@@ -2088,7 +2088,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.acos(x) returns the arccosine of x, in radians
+ * Math.acos(x) returns the arccosine of x, in radians.
  * @see {@link https://www.w3schools.com/jsref/jsref_acos.asp}
  * @access public
  * @name Math.acos
@@ -2099,7 +2099,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.asin(x) returns the arcsine of x, in radians
+ * Math.asin(x) returns the arcsine of x, in radians.
  * @see {@link https://www.w3schools.com/jsref/jsref_asin.asp}
  * @access public
  * @name Math.asin
@@ -2110,7 +2110,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.atan(x) returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians
+ * Math.atan(x) returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians.
  * @see {@link https://www.w3schools.com/jsref/jsref_atan.asp}
  * @access public
  * @name Math.atan
@@ -2121,7 +2121,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.atan2(y, x) returns the arctangent of the quotient of its arguments
+ * Math.atan2(y, x) returns the arctangent of the quotient of its arguments.
  * @see {@link https://www.w3schools.com/jsref/jsref_atan2.asp}
  * @access public
  * @name Math.atan2
@@ -2133,7 +2133,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.ceil(x) returns the value of x rounded up to its nearest integer
+ * Math.ceil(x) returns the value of x rounded up to its nearest integer.
  * @see {@link https://www.w3schools.com/jsref/jsref_ceil.asp}
  * @access public
  * @name Math.ceil
@@ -2144,7 +2144,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.cos(x) returns the cosine of x (x is in radians)
+ * Math.cos(x) returns the cosine of x (x is in radians).
  * @see {@link https://www.w3schools.com/jsref/jsref_cos.asp}
  * @access public
  * @name Math.cos
@@ -2155,7 +2155,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.exp(x) returns the value of Ex
+ * Math.exp(x) returns the value of Ex.
  * @see {@link https://www.w3schools.com/jsref/jsref_exp.asp}
  * @access public
  * @name Math.exp
@@ -2166,7 +2166,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.floor(x) returns the value of x rounded down to its nearest integer
+ * Math.floor(x) returns the value of x rounded down to its nearest integer.
  * @see {@link https://www.w3schools.com/jsref/jsref_floor.asp}
  * @access public
  * @name Math.floor
@@ -2177,7 +2177,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.log(x) returns the natural logarithm (base E) of x
+ * Math.log(x) returns the natural logarithm (base E) of x.
  * @see {@link https://www.w3schools.com/jsref/jsref_log.asp}
  * @access public
  * @name Math.log
@@ -2188,7 +2188,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.max(x, y, z, ..., n) returns the number with the highest value
+ * Math.max(x, y, z, ..., n) returns the number with the highest value.
  * @see {@link https://www.w3schools.com/jsref/jsref_max.asp}
  * @access public
  * @name Math.max
@@ -2199,7 +2199,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.min(x, y, z, ..., n) returns the number with the lowest value
+ * Math.min(x, y, z, ..., n) returns the number with the lowest value.
  * @see {@link https://www.w3schools.com/jsref/jsref_min.asp}
  * @access public
  * @name Math.min
@@ -2210,7 +2210,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.pow(x, y) returns the value of x to the power of y
+ * Math.pow(x, y) returns the value of x to the power of y.
  * @see {@link https://www.w3schools.com/jsref/jsref_pow.asp}
  * @access public
  * @name Math.pow
@@ -2222,7 +2222,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.round(x) returns the value of x rounded to its nearest integer
+ * Math.round(x) returns the value of x rounded to its nearest integer.
  * @see {@link https://www.w3schools.com/jsref/jsref_round.asp}
  * @access public
  * @name Math.round
@@ -2235,7 +2235,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.sin(x) returns the sine of x (x is in radians)
+ * Math.sin(x) returns the sine of x (x is in radians).
  * @see {@link https://www.w3schools.com/jsref/jsref_sin.asp}
  * @access public
  * @name Math.sin
@@ -2246,7 +2246,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.sqrt(x)	returns the square root of x
+ * Math.sqrt(x) returns the square root of x.
  * @see {@link https://www.w3schools.com/jsref/jsref_sqrt.asp}
  * @access public
  * @name Math.sqrt
@@ -2257,7 +2257,7 @@ function dot(x, y) {
  */
 
 /**
- * Math.tan(x) returns the tangent of an angle
+ * Math.tan(x) returns the tangent of an angle.
  * @see {@link https://www.w3schools.com/jsref/jsref_tan.asp}
  * @access public
  * @name Math.tan
@@ -2268,7 +2268,7 @@ function dot(x, y) {
  */
 
 /**
- * Euler's number (approx. 2.718)
+ * Euler's number (approx. 2.718).
  * @see {@link https://www.w3schools.com/jsref/jsref_e.asp}
  * @access public
  * @name Math.E
@@ -2278,7 +2278,7 @@ function dot(x, y) {
  */
 
 /**
- * Natural logarithm of 2 (approx. 0.693)
+ * Natural logarithm of 2 (approx. 0.693).
  * @see {@link https://www.w3schools.com/jsref/jsref_ln2.asp}
  * @access public
  * @name Math.LN2
@@ -2288,7 +2288,7 @@ function dot(x, y) {
  */
 
 /**
- * Natural logarithm of 10 (approx. 2.302)
+ * Natural logarithm of 10 (approx. 2.302).
  * @see {@link https://www.w3schools.com/jsref/jsref_ln10.asp}
  * @access public
  * @name Math.LN10
@@ -2298,7 +2298,7 @@ function dot(x, y) {
  */
 
 /**
- * Base-2 logarithm of E (approx. 1.442)
+ * Base-2 logarithm of E (approx. 1.442).
  * @see {@link https://www.w3schools.com/jsref/jsref_log2e.asp}
  * @access public
  * @name Math.LOG2E
@@ -2308,7 +2308,7 @@ function dot(x, y) {
  */
 
 /**
- * Base-10 logarithm of E (approx. 0.434)
+ * Base-10 logarithm of E (approx. 0.434).
  * @see {@link https://www.w3schools.com/jsref/jsref_log10e.asp}
  * @access public
  * @name Math.LOG10E
@@ -2328,7 +2328,7 @@ function dot(x, y) {
  */
 
 /**
- * Square root of 1/2 (approx. 0.707)
+ * Square root of 1/2 (approx. 0.707).
  * @see {@link https://www.w3schools.com/jsref/jsref_sqrt1_2.asp}
  * @access public
  * @name Math.SQRT1_2
@@ -2338,7 +2338,7 @@ function dot(x, y) {
  */
 
 /**
- * Square root of 2 (approx. 1.414)
+ * Square root of 2 (approx. 1.414).
  * @see {@link https://www.w3schools.com/jsref/jsref_sqrt2.asp}
  * @access public
  * @name Math.SQRT2
