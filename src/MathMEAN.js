@@ -1,5 +1,5 @@
 /**
- * Calculate the variance from an array of numbers. The function fails,
+ * Calculate the variance from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers

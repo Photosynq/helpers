@@ -1,5 +1,5 @@
 /**
- * Get the minimum value from an array of numbers. The function fails,
+ * Get the minimum value from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers

@@ -1,5 +1,5 @@
 /**
- * Calculate the sum from an array of numbers. The function fails, if the array is empty or has invalid values.
+ * Calculate the sum from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
  * @param {number[]} values numbers
  * @returns {number}

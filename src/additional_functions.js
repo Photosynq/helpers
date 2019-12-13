@@ -6,7 +6,7 @@
  * Multiple Linear Regression
  * @access public
  * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
- * @returns {object} Returns rsquared, slopes and points
+ * @returns {object} Returns rsquared, slopes and points.
  * @example MathEXPINVREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ] );
  * // returns
  * {
@@ -99,7 +99,7 @@ module.exports.MathMULTREG = MathMULTREG;
  * A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.
  * @access public
  * @param {array[]} input_raw Input x,y value pairs [ [x1,y1], [x2,y2], ..., [xn,yn] ].
- * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope
+ * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope.
  * @example MathEXPINVREG( [ [x1,y1], [x2,y2], ..., [xn,yn] ] );
  * // returns
  * {

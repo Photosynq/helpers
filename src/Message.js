@@ -4,7 +4,7 @@
  * @access public
  * @param {string} msg Info Message
  * @param {object} output object that is returned at the end
- * @returns {object} pushes the message into the output object
+ * @returns {object} pushes the message into the output object.
  * @example info('Your Info Message', output);
  * // output['messages']['info']['Your Info Message']
  */
@@ -25,7 +25,7 @@ module.exports.info = info;
  * @access public
  * @param {string} msg Warning Message
  * @param {object} output object that is returned at the end
- * @returns {object} pushes the message into the output object
+ * @returns {object} pushes the message into the output object.
  * @example warning('Your Warning Message', output);
  * // output['messages']['warning']['Your Warning Message']
  */
@@ -41,12 +41,12 @@ function warning(msg, output) {
 module.exports.warning = warning;
 
 /**
- * Add an Danger Message for the User. These messages will be shown in the data viewer as well.
+ * Add a Danger Message for the User. These messages will be shown in the data viewer as well.
  * Use these messages to indicate a problematic issue that will most likely result in an invalid measurement.
  * @access public
  * @param {string} msg Danger Message
  * @param {object} output object that is returned at the end
- * @returns {object} pushes the message into the output object
+ * @returns {object} pushes the message into the output object.
  * @example danger('Your Danger Message', output);
  * // output['messages']['info']['Your Danger Message']
  */
