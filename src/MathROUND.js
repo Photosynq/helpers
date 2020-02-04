@@ -1,6 +1,7 @@
 /**
  * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number} value
  * @param {number} [digets=2] number of digits
  * @returns {number}

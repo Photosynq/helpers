@@ -2,6 +2,7 @@
  * Add an Info Message for the User.
  * Use these messages to give additional information (if necessary).
  * @access public
+ * @function
  * @param {string} msg Info Message
  * @param {object} output object that is returned at the end
  * @returns {object} pushes the message into the output object.
@@ -23,6 +24,7 @@ module.exports.info = info;
  * Add an Warning Message for the User.
  * Use these messages to indicate a potential issue and direct the user to check the measurement again.
  * @access public
+ * @function
  * @param {string} msg Warning Message
  * @param {object} output object that is returned at the end
  * @returns {object} pushes the message into the output object.
@@ -44,6 +46,7 @@ module.exports.warning = warning;
  * Add a Danger Message for the User. These messages will be shown in the data viewer as well.
  * Use these messages to indicate a problematic issue that will most likely result in an invalid measurement.
  * @access public
+ * @function
  * @param {string} msg Danger Message
  * @param {object} output object that is returned at the end
  * @returns {object} pushes the message into the output object.

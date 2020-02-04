@@ -1,6 +1,7 @@
 /**
  * The function transforms a given array by providing a second same length array, or a single number.
  * @access public
+ * @function
  * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs')} fn Available functions to transform the input array.
  * @param {number[]} a1 Input array.
  * @param {number|number[]} [a2] Second array or single number

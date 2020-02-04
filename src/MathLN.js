@@ -1,6 +1,7 @@
 /**
  * Returns the natural logarithm (base E) of a number.
  * @access public
+ * @function
  * @param {number} value
  * @returns {number}
  * @example MathLN(10);

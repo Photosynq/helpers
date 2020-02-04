@@ -2,6 +2,7 @@
  * This function transforms two arrays into one array of x,y pairs
  * Both arrays supplied need to have the same size.
  * @access public
+ * @function
  * @param {number[]} x values.
  * @param {number[]} y values.
  * @returns {number[]|void} [ [x1,y1], [x2,y2], ..., [xn,yn] ].

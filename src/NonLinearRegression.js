@@ -4,6 +4,7 @@
  * Function to perform a non-linear regression.
  * @see http://statpages.info/nonlin.html
  * @access public
+ * @function
  * @param {object} data Data for the non-linear regression needs to be provided as an array of x,y pairs. `[[x1,y1], [x2,y2], ..., [xn,yn]]`
  * @param {object} options
  * @param {(string|function)} options.equation Select preset equation (string) or supply function

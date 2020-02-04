@@ -1,6 +1,7 @@
 /**
  * Generate a protocol lookup table for a protocol set.
  * @access public
+ * @function
  * @param {object} json
  * @returns {object} Lookup table
  * @example GetLabelLookup(json);

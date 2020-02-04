@@ -1,6 +1,7 @@
 /**
  * Returns the logarithm (base 10) of a number.
  * @access public
+ * @function
  * @param {number} value
  * @returns {number}
  * @example MathLOG(10);

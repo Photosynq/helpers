@@ -2,6 +2,7 @@
  * Function to perform a simple linear regression (y = mx +b), returning slope, y-intercent, 
  * correlation coefficient (R) and coefficient of determination (R²).
  * @access public
+ * @function
  * @param {number[]} x x-values
  * @param {number[]} y y-values
  * @returns {object} Linear regression results

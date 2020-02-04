@@ -4,6 +4,7 @@
  * When multiple protocols in the set have the same label an array with all
  * protcol objects of matching labels is returned.
  * @access public
+ * @function
  * @param {string} label The label from the protocol set
  * @param {Object} json Required! The protocol content
  * @param {boolean} [array=false] Always return an array

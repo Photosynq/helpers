@@ -2,6 +2,7 @@
  * This is a flexible function to generate an array of arithmetic progressions.
  * All arguments must be integers.
  * @access public
+ * @function
  * @param {number} [start=0] Start value.
  * @param {number} stop Stop value.
  * @param {number} [step=1] Step size.

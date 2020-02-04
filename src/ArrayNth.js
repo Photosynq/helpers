@@ -1,6 +1,7 @@
 /**
  * Extract every n-th element from an array.
  * @access public
+ * @function
  * @param {number[]} arr Input array.
  * @param {number} [size=1] Step size.
  * @param {number} [idx=0] Starting point.

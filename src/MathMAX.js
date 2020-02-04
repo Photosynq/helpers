@@ -2,6 +2,7 @@
  * Get the maximum value from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathMAX([1,2,3,4.5]);

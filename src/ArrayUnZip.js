@@ -1,6 +1,7 @@
 /**
  * This function transforms an array of [x, y] pairs into an object with an array of x and an array of y values
  * @access public
+ * @function
  * @param {array[]} input Array of [x, y] pairs.
  * @returns {object|void} { x: [x1, x2, ..., xn], y: [y1, y2, ..., yn] }
  * @example ArrayUnZip( [ [1, 4], [2, 5], [3, 6] ] );

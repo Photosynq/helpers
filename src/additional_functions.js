@@ -5,6 +5,7 @@
 /**
  * Multiple Linear Regression
  * @access public
+ * @function
  * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
  * @returns {object} Returns rsquared, slopes and points.
  * @example MathEXPINVREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ] );
@@ -98,6 +99,7 @@ module.exports.MathMULTREG = MathMULTREG;
  * Fit exponential decay to Y = Y0 + Ae^(-x/t)
  * A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.
  * @access public
+ * @function
  * @param {array[]} input_raw Input x,y value pairs [ [x1,y1], [x2,y2], ..., [xn,yn] ].
  * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope.
  * @example MathEXPINVREG( [ [x1,y1], [x2,y2], ..., [xn,yn] ] );
@@ -211,6 +213,7 @@ module.exports.MathEXPINVREG = MathEXPINVREG;
 /**
  * Polynomial fit to y = a0 + a1x + a2x^2 + a3x^3....
  * @access public
+ * @function
  * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
  * @param {degree} size degree.
  * @returns {object} Returns points, slopes and error
