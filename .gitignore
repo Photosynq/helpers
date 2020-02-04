@@ -27,3 +27,4 @@ desktop.ini
 # Others #
 ##########
 !docs/documentation.md
+!docs/documentation.json
