@@ -1,6 +1,7 @@
 /**
  * Extract every n-th element from an array.
  * @access public
+ * @function
  * @param {number[]} arr Input array.
  * @param {number} [size=1] Step size.
  * @param {number} [idx=0] Starting point.
@@ -38,6 +39,7 @@ function ArrayNth(arr, size, idx) {
  * This is a flexible function to generate an array of arithmetic progressions.
  * All arguments must be integers.
  * @access public
+ * @function
  * @param {number} [start=0] Start value.
  * @param {number} stop Stop value.
  * @param {number} [step=1] Step size.
@@ -110,6 +112,7 @@ function ArrayRange(start, stop, step, transform) {
 /**
  * This function transforms an array of [x, y] pairs into an object with an array of x and an array of y values
  * @access public
+ * @function
  * @param {array[]} input Array of [x, y] pairs.
  * @returns {object|void} { x: [x1, x2, ..., xn], y: [y1, y2, ..., yn] }
  * @example ArrayUnZip( [ [1, 4], [2, 5], [3, 6] ] );
@@ -132,6 +135,7 @@ function ArrayUnZip(input){
  * This function transforms two arrays into one array of x,y pairs
  * Both arrays supplied need to have the same size.
  * @access public
+ * @function
  * @param {number[]} x values.
  * @param {number[]} y values.
  * @returns {number[]|void} [ [x1,y1], [x2,y2], ..., [xn,yn] ].
@@ -158,6 +162,7 @@ function ArrayZip(x,y){
  * When multiple protocols in the set have the same label an array with all
  * indexes of matching labels is returned.
  * @access public
+ * @function
  * @param {string} label Label from the protocol set
  * @param {Object} json Required! The protocol content
  * @param {boolean} [array=false] Always return an array
@@ -193,6 +198,7 @@ function GetIndexByLabel( label, json, array ) {
 /**
  * Generate a protocol lookup table for a protocol set.
  * @access public
+ * @function
  * @param {object} json
  * @returns {object} Lookup table
  * @example GetLabelLookup(json);
@@ -227,6 +233,7 @@ function GetLabelLookup(json){
  * When multiple protocols in the set have the same label an array with all
  * protcol objects of matching labels is returned.
  * @access public
+ * @function
  * @param {string} label The label from the protocol set
  * @param {Object} json Required! The protocol content
  * @param {boolean} [array=false] Always return an array
@@ -260,6 +267,7 @@ function GetProtocolByLabel( label, json, array ) {
  * Function to perform a simple linear regression (y = mx +b), returning slope, y-intercent, 
  * correlation coefficient (R) and coefficient of determination (R²).
  * @access public
+ * @function
  * @param {number[]} x x-values
  * @param {number[]} y y-values
  * @returns {object} Linear regression results
@@ -315,6 +323,7 @@ function MathLINREG(x, y) {
 /**
  * Returns the natural logarithm (base E) of a number.
  * @access public
+ * @function
  * @param {number} value
  * @returns {number}
  * @example MathLN(10);
@@ -331,6 +340,7 @@ function MathLN(value) {
 /**
  * Returns the logarithm (base 10) of a number.
  * @access public
+ * @function
  * @param {number} value
  * @returns {number}
  * @example MathLOG(10);
@@ -348,6 +358,7 @@ function MathLOG(value) {
  * Get the maximum value from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathMAX([1,2,3,4.5]);
@@ -369,9 +380,10 @@ function MathMAX(values) {
 	return parseFloat(max);
 }
 /**
- * Calculate the variance from an array of numbers. The function fails
+ * Calculate the mean from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathMEAN([1,2,3,4.5]);
@@ -400,6 +412,7 @@ function MathMEAN(values) {
  * Calculate the median from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathMEDIAN([1,2,3,4.5]);
@@ -445,6 +458,7 @@ function MathMEDIAN(values) {
  * Get the minimum value from an array of numbers. The function fails
  * if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathMIN([1,2,3,4.5]);
@@ -468,6 +482,7 @@ function MathMIN(values) {
 /**
  * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number} value
  * @param {number} [digets=2] number of digits
  * @returns {number}
@@ -495,6 +510,7 @@ function MathROUND(value, digets) {
 /**
  * Calculate the standard error from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathSTDERR([1,2,3,4.5]);
@@ -546,6 +562,7 @@ function MathSTDERR(values) {
 /**
  * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathSTDEV([1,2,3,4.5]);
@@ -597,6 +614,7 @@ function MathSTDEV(values) {
 /**
  * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathSTDEVS([1,2,3,4.5]);
@@ -648,6 +666,7 @@ function MathSTDEVS(values) {
 /**
  * Calculate the sum from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathSum([1,2,3,4.5]);
@@ -672,6 +691,7 @@ function MathSUM(values) {
 /**
  * Calculate the variance from an array of numbers. The function fails if the array is empty or has invalid values.
  * @access public
+ * @function
  * @param {number[]} values numbers
  * @returns {number}
  * @example MathVARIANCE([1,2,3,4.5]);
@@ -718,6 +738,7 @@ function MathVARIANCE(values) {
  * Add an Info Message for the User.
  * Use these messages to give additional information (if necessary).
  * @access public
+ * @function
  * @param {string} msg Info Message
  * @param {object} output object that is returned at the end
  * @returns {object} pushes the message into the output object.
@@ -737,6 +758,7 @@ function info(msg, output) {
  * Add an Warning Message for the User.
  * Use these messages to indicate a potential issue and direct the user to check the measurement again.
  * @access public
+ * @function
  * @param {string} msg Warning Message
  * @param {object} output object that is returned at the end
  * @returns {object} pushes the message into the output object.
@@ -756,6 +778,7 @@ function warning(msg, output) {
  * Add a Danger Message for the User. These messages will be shown in the data viewer as well.
  * Use these messages to indicate a problematic issue that will most likely result in an invalid measurement.
  * @access public
+ * @function
  * @param {string} msg Danger Message
  * @param {object} output object that is returned at the end
  * @returns {object} pushes the message into the output object.
@@ -776,6 +799,7 @@ function danger(msg, output) {
  * Function to perform a non-linear regression.
  * @see http://statpages.info/nonlin.html
  * @access public
+ * @function
  * @param {object} data Data for the non-linear regression needs to be provided as an array of x,y pairs. `[[x1,y1], [x2,y2], ..., [xn,yn]]`
  * @param {object} options
  * @param {(string|function)} options.equation Select preset equation (string) or supply function
@@ -1186,6 +1210,7 @@ function NonLinearRegression(data, options) {
 /**
  * The function transforms a given array by providing a second same length array, or a single number.
  * @access public
+ * @function
  * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs')} fn Available functions to transform the input array.
  * @param {number[]} a1 Input array.
  * @param {number|number[]} [a2] Second array or single number
@@ -1380,6 +1405,7 @@ function TransformTrace( fn, a1, a2 ) {
 /**
  * Multiple Linear Regression
  * @access public
+ * @function
  * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
  * @returns {object} Returns rsquared, slopes and points.
  * @example MathEXPINVREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ] );
@@ -1471,6 +1497,7 @@ function MathMULTREG(input_raw) {
  * Fit exponential decay to Y = Y0 + Ae^(-x/t)
  * A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.
  * @access public
+ * @function
  * @param {array[]} input_raw Input x,y value pairs [ [x1,y1], [x2,y2], ..., [xn,yn] ].
  * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope.
  * @example MathEXPINVREG( [ [x1,y1], [x2,y2], ..., [xn,yn] ] );
@@ -1582,6 +1609,7 @@ function MathEXPINVREG(input_raw) {
 /**
  * Polynomial fit to y = a0 + a1x + a2x^2 + a3x^3....
  * @access public
+ * @function
  * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
  * @param {degree} size degree.
  * @returns {object} Returns points, slopes and error
@@ -2078,6 +2106,7 @@ function dot(x, y) {
  * Math.abs(x) returns the absolute value of x.
  * @see {@link https://www.w3schools.com/jsref/jsref_abs.asp}
  * @access public
+ * @function
  * @name Math.abs
  * @param {number} x
  * @returns {number}
@@ -2091,6 +2120,7 @@ function dot(x, y) {
  * Math.acos(x) returns the arccosine of x, in radians.
  * @see {@link https://www.w3schools.com/jsref/jsref_acos.asp}
  * @access public
+ * @function
  * @name Math.acos
  * @param {number} x
  * @returns {number}
@@ -2102,6 +2132,7 @@ function dot(x, y) {
  * Math.asin(x) returns the arcsine of x, in radians.
  * @see {@link https://www.w3schools.com/jsref/jsref_asin.asp}
  * @access public
+ * @function
  * @name Math.asin
  * @param {number} x
  * @returns {number}
@@ -2113,6 +2144,7 @@ function dot(x, y) {
  * Math.atan(x) returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians.
  * @see {@link https://www.w3schools.com/jsref/jsref_atan.asp}
  * @access public
+ * @function
  * @name Math.atan
  * @param {number} x
  * @returns {number}
@@ -2124,6 +2156,7 @@ function dot(x, y) {
  * Math.atan2(y, x) returns the arctangent of the quotient of its arguments.
  * @see {@link https://www.w3schools.com/jsref/jsref_atan2.asp}
  * @access public
+ * @function
  * @name Math.atan2
  * @param {number} x
  * @param {number} y
@@ -2136,6 +2169,7 @@ function dot(x, y) {
  * Math.ceil(x) returns the value of x rounded up to its nearest integer.
  * @see {@link https://www.w3schools.com/jsref/jsref_ceil.asp}
  * @access public
+ * @function
  * @name Math.ceil
  * @param {number} x
  * @returns {number}
@@ -2147,6 +2181,7 @@ function dot(x, y) {
  * Math.cos(x) returns the cosine of x (x is in radians).
  * @see {@link https://www.w3schools.com/jsref/jsref_cos.asp}
  * @access public
+ * @function
  * @name Math.cos
  * @param {number} x
  * @returns {number}
@@ -2158,6 +2193,7 @@ function dot(x, y) {
  * Math.exp(x) returns the value of Ex.
  * @see {@link https://www.w3schools.com/jsref/jsref_exp.asp}
  * @access public
+ * @function
  * @name Math.exp
  * @param {number} x
  * @returns {number}
@@ -2169,6 +2205,7 @@ function dot(x, y) {
  * Math.floor(x) returns the value of x rounded down to its nearest integer.
  * @see {@link https://www.w3schools.com/jsref/jsref_floor.asp}
  * @access public
+ * @function
  * @name Math.floor
  * @param {number} x
  * @returns {number}
@@ -2180,6 +2217,7 @@ function dot(x, y) {
  * Math.log(x) returns the natural logarithm (base E) of x.
  * @see {@link https://www.w3schools.com/jsref/jsref_log.asp}
  * @access public
+ * @function
  * @name Math.log
  * @param {number} x
  * @returns {number}
@@ -2191,6 +2229,7 @@ function dot(x, y) {
  * Math.max(x, y, z, ..., n) returns the number with the highest value.
  * @see {@link https://www.w3schools.com/jsref/jsref_max.asp}
  * @access public
+ * @function
  * @name Math.max
  * @param {number} x
  * @returns {number}
@@ -2202,6 +2241,7 @@ function dot(x, y) {
  * Math.min(x, y, z, ..., n) returns the number with the lowest value.
  * @see {@link https://www.w3schools.com/jsref/jsref_min.asp}
  * @access public
+ * @function
  * @name Math.min
  * @param {number} x
  * @returns {number}
@@ -2213,6 +2253,7 @@ function dot(x, y) {
  * Math.pow(x, y) returns the value of x to the power of y.
  * @see {@link https://www.w3schools.com/jsref/jsref_pow.asp}
  * @access public
+ * @function
  * @name Math.pow
  * @param {number} x
  * @param {number} y
@@ -2225,6 +2266,7 @@ function dot(x, y) {
  * Math.round(x) returns the value of x rounded to its nearest integer.
  * @see {@link https://www.w3schools.com/jsref/jsref_round.asp}
  * @access public
+ * @function
  * @name Math.round
  * @param {number} x
  * @returns {number}
@@ -2249,6 +2291,7 @@ function dot(x, y) {
  * Math.sqrt(x) returns the square root of x.
  * @see {@link https://www.w3schools.com/jsref/jsref_sqrt.asp}
  * @access public
+ * @function
  * @name Math.sqrt
  * @param {number} x
  * @returns {number}
@@ -2260,6 +2303,7 @@ function dot(x, y) {
  * Math.tan(x) returns the tangent of an angle.
  * @see {@link https://www.w3schools.com/jsref/jsref_tan.asp}
  * @access public
+ * @function
  * @name Math.tan
  * @param {number} x
  * @returns {number}
@@ -2271,6 +2315,7 @@ function dot(x, y) {
  * Euler's number (approx. 2.718).
  * @see {@link https://www.w3schools.com/jsref/jsref_e.asp}
  * @access public
+ * @constant
  * @name Math.E
  * @returns {number} 2.718281828459045
  * @example Math.E;
@@ -2281,6 +2326,7 @@ function dot(x, y) {
  * Natural logarithm of 2 (approx. 0.693).
  * @see {@link https://www.w3schools.com/jsref/jsref_ln2.asp}
  * @access public
+ * @constant
  * @name Math.LN2
  * @returns {number} 0.6931471805599453
  * @example Math.LN2;
@@ -2291,6 +2337,7 @@ function dot(x, y) {
  * Natural logarithm of 10 (approx. 2.302).
  * @see {@link https://www.w3schools.com/jsref/jsref_ln10.asp}
  * @access public
+ * @constant
  * @name Math.LN10
  * @returns {number} 2.302585092994046
  * @example Math.LN10;
@@ -2301,6 +2348,7 @@ function dot(x, y) {
  * Base-2 logarithm of E (approx. 1.442).
  * @see {@link https://www.w3schools.com/jsref/jsref_log2e.asp}
  * @access public
+ * @constant
  * @name Math.LOG2E
  * @returns {number} 1.4426950408889634
  * @example Math.LOG2E;
@@ -2311,6 +2359,7 @@ function dot(x, y) {
  * Base-10 logarithm of E (approx. 0.434).
  * @see {@link https://www.w3schools.com/jsref/jsref_log10e.asp}
  * @access public
+ * @constant
  * @name Math.LOG10E
  * @returns {number} 0.4342944819032518
  * @example Math.LOG10E;
@@ -2321,6 +2370,7 @@ function dot(x, y) {
  * PI (approx. 3.14)
  * @see {@link https://www.w3schools.com/jsref/jsref_pi.asp}
  * @access public
+ * @constant
  * @name Math.PI
  * @returns {number} 3.141592653589793
  * @example Math.PI;
@@ -2331,6 +2381,7 @@ function dot(x, y) {
  * Square root of 1/2 (approx. 0.707).
  * @see {@link https://www.w3schools.com/jsref/jsref_sqrt1_2.asp}
  * @access public
+ * @constant
  * @name Math.SQRT1_2
  * @returns {number} 0.7071067811865476
  * @example Math.SQRT1_2;
@@ -2341,6 +2392,7 @@ function dot(x, y) {
  * Square root of 2 (approx. 1.414).
  * @see {@link https://www.w3schools.com/jsref/jsref_sqrt2.asp}
  * @access public
+ * @constant
  * @name Math.SQRT2
  * @returns {number} 1.4142135623730951
  * @example Math.SQRT2;
@@ -2351,6 +2403,7 @@ function dot(x, y) {
  * Random number
  * @see {@link https://www.w3schools.com/jsref/jsref_random.asp}
  * @access public
+ * @function
  * @name Math.random
  * @returns {number} between 0 and 1
  * @example Math.random();

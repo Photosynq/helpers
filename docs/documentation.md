@@ -773,7 +773,7 @@ Returns **[number][2]**
 
 ## MathMEAN
 
-Calculate the variance from an array of numbers. The function fails
+Calculate the mean from an array of numbers. The function fails
 if the array is empty or has invalid values.
 
 ### Parameters
