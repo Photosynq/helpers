@@ -206,7 +206,8 @@ Returns **[object][3]** pushes the message into the output object.
 
 ## Math.abs
 
--   **See: [https://www.w3schools.com/jsref/jsref_abs.asp][6]**
+-   **See: [https://www.w3schools.com/jsref/jsref_abs.asp][6]
+    **
 
 Math.abs(x) returns the absolute value of x.
 
@@ -227,7 +228,8 @@ Returns **[number][2]**
 
 ## Math.acos
 
--   **See: [https://www.w3schools.com/jsref/jsref_acos.asp][7]**
+-   **See: [https://www.w3schools.com/jsref/jsref_acos.asp][7]
+    **
 
 Math.acos(x) returns the arccosine of x, in radians.
 
@@ -246,7 +248,8 @@ Returns **[number][2]**
 
 ## Math.asin
 
--   **See: [https://www.w3schools.com/jsref/jsref_asin.asp][8]**
+-   **See: [https://www.w3schools.com/jsref/jsref_asin.asp][8]
+    **
 
 Math.asin(x) returns the arcsine of x, in radians.
 
@@ -265,7 +268,8 @@ Returns **[number][2]**
 
 ## Math.atan
 
--   **See: [https://www.w3schools.com/jsref/jsref_atan.asp][9]**
+-   **See: [https://www.w3schools.com/jsref/jsref_atan.asp][9]
+    **
 
 Math.atan(x) returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians.
 
@@ -284,7 +288,8 @@ Returns **[number][2]**
 
 ## Math.atan2
 
--   **See: [https://www.w3schools.com/jsref/jsref_atan2.asp][10]**
+-   **See: [https://www.w3schools.com/jsref/jsref_atan2.asp][10]
+    **
 
 Math.atan2(y, x) returns the arctangent of the quotient of its arguments.
 
@@ -304,7 +309,8 @@ Returns **[number][2]**
 
 ## Math.ceil
 
--   **See: [https://www.w3schools.com/jsref/jsref_ceil.asp][11]**
+-   **See: [https://www.w3schools.com/jsref/jsref_ceil.asp][11]
+    **
 
 Math.ceil(x) returns the value of x rounded up to its nearest integer.
 
@@ -323,7 +329,8 @@ Returns **[number][2]**
 
 ## Math.cos
 
--   **See: [https://www.w3schools.com/jsref/jsref_cos.asp][12]**
+-   **See: [https://www.w3schools.com/jsref/jsref_cos.asp][12]
+    **
 
 Math.cos(x) returns the cosine of x (x is in radians).
 
@@ -342,7 +349,8 @@ Returns **[number][2]**
 
 ## Math.E
 
--   **See: [https://www.w3schools.com/jsref/jsref_e.asp][13]**
+-   **See: [https://www.w3schools.com/jsref/jsref_e.asp][13]
+    **
 
 Euler's number (approx. 2.718).
 
@@ -357,7 +365,8 @@ Returns **[number][2]** 2.718281828459045
 
 ## Math.exp
 
--   **See: [https://www.w3schools.com/jsref/jsref_exp.asp][14]**
+-   **See: [https://www.w3schools.com/jsref/jsref_exp.asp][14]
+    **
 
 Math.exp(x) returns the value of Ex.
 
@@ -376,7 +385,8 @@ Returns **[number][2]**
 
 ## Math.floor
 
--   **See: [https://www.w3schools.com/jsref/jsref_floor.asp][15]**
+-   **See: [https://www.w3schools.com/jsref/jsref_floor.asp][15]
+    **
 
 Math.floor(x) returns the value of x rounded down to its nearest integer.
 
@@ -395,7 +405,8 @@ Returns **[number][2]**
 
 ## Math.LN10
 
--   **See: [https://www.w3schools.com/jsref/jsref_ln10.asp][16]**
+-   **See: [https://www.w3schools.com/jsref/jsref_ln10.asp][16]
+    **
 
 Natural logarithm of 10 (approx. 2.302).
 
@@ -410,7 +421,8 @@ Returns **[number][2]** 2.302585092994046
 
 ## Math.LN2
 
--   **See: [https://www.w3schools.com/jsref/jsref_ln2.asp][17]**
+-   **See: [https://www.w3schools.com/jsref/jsref_ln2.asp][17]
+    **
 
 Natural logarithm of 2 (approx. 0.693).
 
@@ -425,7 +437,8 @@ Returns **[number][2]** 0.6931471805599453
 
 ## Math.log
 
--   **See: [https://www.w3schools.com/jsref/jsref_log.asp][18]**
+-   **See: [https://www.w3schools.com/jsref/jsref_log.asp][18]
+    **
 
 Math.log(x) returns the natural logarithm (base E) of x.
 
@@ -444,7 +457,8 @@ Returns **[number][2]**
 
 ## Math.LOG10E
 
--   **See: [https://www.w3schools.com/jsref/jsref_log10e.asp][19]**
+-   **See: [https://www.w3schools.com/jsref/jsref_log10e.asp][19]
+    **
 
 Base-10 logarithm of E (approx. 0.434).
 
@@ -459,7 +473,8 @@ Returns **[number][2]** 0.4342944819032518
 
 ## Math.LOG2E
 
--   **See: [https://www.w3schools.com/jsref/jsref_log2e.asp][20]**
+-   **See: [https://www.w3schools.com/jsref/jsref_log2e.asp][20]
+    **
 
 Base-2 logarithm of E (approx. 1.442).
 
@@ -474,7 +489,8 @@ Returns **[number][2]** 1.4426950408889634
 
 ## Math.max
 
--   **See: [https://www.w3schools.com/jsref/jsref_max.asp][21]**
+-   **See: [https://www.w3schools.com/jsref/jsref_max.asp][21]
+    **
 
 Math.max(x, y, z, ..., n) returns the number with the highest value.
 
@@ -493,7 +509,8 @@ Returns **[number][2]**
 
 ## Math.min
 
--   **See: [https://www.w3schools.com/jsref/jsref_min.asp][22]**
+-   **See: [https://www.w3schools.com/jsref/jsref_min.asp][22]
+    **
 
 Math.min(x, y, z, ..., n) returns the number with the lowest value.
 
@@ -512,7 +529,8 @@ Returns **[number][2]**
 
 ## Math.PI
 
--   **See: [https://www.w3schools.com/jsref/jsref_pi.asp][23]**
+-   **See: [https://www.w3schools.com/jsref/jsref_pi.asp][23]
+    **
 
 PI (approx. 3.14)
 
@@ -527,7 +545,8 @@ Returns **[number][2]** 3.141592653589793
 
 ## Math.pow
 
--   **See: [https://www.w3schools.com/jsref/jsref_pow.asp][24]**
+-   **See: [https://www.w3schools.com/jsref/jsref_pow.asp][24]
+    **
 
 Math.pow(x, y) returns the value of x to the power of y.
 
@@ -547,7 +566,8 @@ Returns **[number][2]**
 
 ## Math.random
 
--   **See: [https://www.w3schools.com/jsref/jsref_random.asp][25]**
+-   **See: [https://www.w3schools.com/jsref/jsref_random.asp][25]
+    **
 
 Random number
 
@@ -562,7 +582,8 @@ Returns **[number][2]** between 0 and 1
 
 ## Math.round
 
--   **See: [https://www.w3schools.com/jsref/jsref_round.asp][26]**
+-   **See: [https://www.w3schools.com/jsref/jsref_round.asp][26]
+    **
 
 Math.round(x) returns the value of x rounded to its nearest integer.
 
@@ -583,7 +604,8 @@ Returns **[number][2]**
 
 ## Math.sin
 
--   **See: [https://www.w3schools.com/jsref/jsref_sin.asp][27]**
+-   **See: [https://www.w3schools.com/jsref/jsref_sin.asp][27]
+    **
 
 Math.sin(x) returns the sine of x (x is in radians).
 
@@ -602,7 +624,8 @@ Returns **[number][2]**
 
 ## Math.sqrt
 
--   **See: [https://www.w3schools.com/jsref/jsref_sqrt.asp][28]**
+-   **See: [https://www.w3schools.com/jsref/jsref_sqrt.asp][28]
+    **
 
 Math.sqrt(x) returns the square root of x.
 
@@ -621,7 +644,8 @@ Returns **[number][2]**
 
 ## Math.SQRT1_2
 
--   **See: [https://www.w3schools.com/jsref/jsref_sqrt1_2.asp][29]**
+-   **See: [https://www.w3schools.com/jsref/jsref_sqrt1_2.asp][29]
+    **
 
 Square root of 1/2 (approx. 0.707).
 
@@ -636,7 +660,8 @@ Returns **[number][2]** 0.7071067811865476
 
 ## Math.SQRT2
 
--   **See: [https://www.w3schools.com/jsref/jsref_sqrt2.asp][30]**
+-   **See: [https://www.w3schools.com/jsref/jsref_sqrt2.asp][30]
+    **
 
 Square root of 2 (approx. 1.414).
 
@@ -651,7 +676,8 @@ Returns **[number][2]** 1.4142135623730951
 
 ## Math.tan
 
--   **See: [https://www.w3schools.com/jsref/jsref_tan.asp][31]**
+-   **See: [https://www.w3schools.com/jsref/jsref_tan.asp][31]
+    **
 
 Math.tan(x) returns the tangent of an angle.
 
@@ -976,7 +1002,8 @@ Returns **[number][2]**
 
 ## NonLinearRegression
 
--   **See: [http://statpages.info/nonlin.html][32]**
+-   **See: [http://statpages.info/nonlin.html][32]
+    **
 
 Function to perform a non-linear regression.
 
