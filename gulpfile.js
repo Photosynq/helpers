@@ -2,7 +2,7 @@
  * PhotosynQ Math functions
  */
 
-const {series, parallel, dest, src} = require('gulp');
+const {series, parallel, dest, src, watch} = require('gulp');
 const jetpack = require('fs-jetpack');
 const mocha = require('gulp-mocha');
 const minify = require('gulp-minify');
@@ -147,7 +147,14 @@ function docsHTML() {
     });
 }
 
+const watcher = function () {
+    watch( ['src/*.js', 'test/test.js','test/tests.json'],
+        series( clean, build, compress, testBrowser, testBrowserMini, testNodeInclude, testNode ) 
+    );
+};
+
 exports.build  = series( clean, build, compress, docsMD );
 exports.test = series( clean, build, compress, testBrowser, testBrowserMini, testNodeInclude, testNode );
 exports.docs = parallel( docsJSON, docsMD, docsHTML );
 exports.default = exports.release = series( clean, build, compress, testBrowser, testBrowserMini, testNodeInclude, testNode, parallel( docsJSON, docsMD, docsHTML ) );
+exports.watch = series( watcher );
