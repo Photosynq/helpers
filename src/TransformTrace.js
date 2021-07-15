@@ -2,7 +2,7 @@
  * The function transforms a given array by providing a second same length array, or a single number.
  * @access public
  * @function
- * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs')} fn Available functions to transform the input array.
+ * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs'|'absorbance','absolute')} fn Available functions to transform the input array.
  * @param {number[]} a1 Input array.
  * @param {number|number[]} [a2] Second array or single number
  * @returns {number[]|void} Transformed array or null
@@ -35,38 +35,80 @@
  * TransformTrace('ma', [1.5, 2, 3, 4]);
  * // returns [1.6667, 2.1665, 3, 3.6665]
  *
- * TransformTrace('sgf', [1, 2, 3, 4]);
- * // returns [6, 7, 8, 9]
+ * TransformTrace('sgf', [1,2,3,4,3,2,1,1]);
+ * // returns [1.3333333333333333,1.9523809523809523]
  *
  * // Absorbance (abs) -log(I/I0)
  *
  * // In case no value is provided, I0 is the fist value from the array
  * TransformTrace('abs', [1.5, 2, 3, 4]);
  * // returns [-0, -0.12494, -0.30103, -0.42597]
+ * 
+ * TransformTrace('absorbance', [1.5, 2, 3, 4]);
+ * // returns [-0, -0.12494, -0.30103, -0.42597]
  *
  * // The provided value is I0
  * TransformTrace('abs', [1.5, 2, 3, 4], 1);
  * // returns [-0.1761, -0.3010, -0.4771, -0.6021]
+ * 
+ * // Absolute numbers
+ * TransformTrace('absolute', [1, -2, 3, -4]);
+ * // returns [1, 2, 3, 4]
+ * 
  */
 
 function TransformTrace( fn, a1, a2 ) {
 
     // Available functions for transformation
-    var fns = ['add','subtract','multiply','divide','+','-','*','/','normToMin','normToMax','normToRange','normToIdx','normToVal','ma','sgf','abs'];
+    var fns = ['add','subtract','multiply','divide','+','-','*','/','normToMin','normToMax','normToRange','normToIdx','normToVal','ma','sgf','abs', 'absorbance', 'absolute'];
     var trace = [];
     var issue = null;
 
-    // Making sure user input meets minimum requirements
-    if( fn === undefined || fns.indexOf(fn) == -1 || a1 === undefined || !Array.isArray(a1) )
-        return 'Unknown Function';
+    // Making sure, the transformation method is available
+    if( fn === undefined || fns.indexOf(fn) == -1)
+        return 'Unknown Transformation';
 
-    // Making sure input for a2 is a valid array
-    if( a2 !== undefined && Array.isArray(a2) && a1.length != a2.length )
-        return 'Arrays have different sizes (a1 = '+a1.length+', a2 = '+a2.length+')';
+    // Making sure the array to transform is an array
+    else if( a1 === undefined || !Array.isArray(a1) )
+        return 'Second parameter needs to be a number array';
+    
+    // Making sure the provided array is a number array
+    else if( a1.findIndex(function(x){ return !Number(x);}) > -1 )
+        return 'Provided array contains elements other than numbers';
 
-    // Making sure input for a2 is a number otherwise
-    else if( a2 !== undefined && !Array.isArray(a2) && typeof a2 != 'number' )
-        return 'Input for third parameter needs to be an array or number';
+    // Making sure, transformations with two parameters have correct inputs
+    else if( ['add','subtract','multiply','divide','+','-','*','/'].indexOf(fn) > -1 ){
+        
+        // Second parameter needs to be a number or number array
+        if( a2 === undefined || !Array.isArray(a2) && typeof a2 != 'number' )
+            return 'Input for second parameter needs to be a number array or number';
+        
+            // Provided arrays have different sizes
+        else if( Array.isArray(a2) && a1.length != a2.length )
+            return 'Provided arrays have different sizes (a1 = '+a1.length+', a2 = '+a2.length+')';
+        
+            // Provided second array is not a number array
+        else if( Array.isArray(a2) && a2.findIndex(function(x){ return !Number(x);}) > -1 )
+            return 'The second array contains elements other than numbers';
+    }
+
+    // Making sure, transformations with number required as second parameter are not receiving arrays
+    else if( ['normToIdx','normToVal'].indexOf(fn) > -1 && typeof a2 != 'number' )
+        return 'This transformation requires the second parameter to be a number';
+
+    // Making sure, absorbance transformation has a number or no parameter
+    else if( ['abs','absorbance'].indexOf(fn) > -1 ) {
+        if( a2 !== undefined && typeof a2 != 'number' )
+            return 'This transformation requires the second parameter to be a number or left empty';
+    }
+
+    // Making sure, transformations with only one input are not returning an array with [undefined]
+    else if( ['normToMin','normToMax','normToRange','ma','sgf','absolute'].indexOf(fn) > -1 && a2 !== undefined )
+        return 'This transformation only allows one input parameter';
+
+    // Make sure, the array to transform has a minimum length
+    else if( ['sgf'].indexOf(fn) > -1 && a1.length <= 6 )
+        return 'Array has to have a minimum length of 7 elements';
 
     if(typeof a2 == 'number'){
         trace = a1.map(function(a){
@@ -85,7 +127,7 @@ function TransformTrace( fn, a1, a2 ) {
             if(fn == 'normToIdx'){
                 return a / a1[a2];
             }
-            if(fn == 'abs'){
+            if(fn == 'abs' || fn == 'absorbance'){
                 return ( - Math.log( ( a / a2) ) / Math.LN10 );
             }
         });
@@ -143,11 +185,17 @@ function TransformTrace( fn, a1, a2 ) {
             trace = tmp;
         }
 
-        if(fn == 'abs'){
-            for (var i in a1)
-                trace.push( ( - Math.log( (a1[i] / a1[0]) ) / Math.LN10 ) );
+        if(fn == 'abs' || fn == 'absorbance'){
+            trace = a1.map(function(a,i,arr){
+                return ( - Math.log( (a / arr[0]) ) / Math.LN10 );
+            });
         }
-    }
+
+        if(fn == 'absolute'){
+            trace = a1.map(function(a){
+                return Math.abs(a);
+            });
+        }
 
     }
 
