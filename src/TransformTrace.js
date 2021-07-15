@@ -167,22 +167,21 @@ function TransformTrace( fn, a1, a2 ) {
     }
 
     else if( Array.isArray(a2) ){
-        for(var i in a1){
+        trace = a1.map(function(a,idx){
             if(fn == 'add' || fn == '+'){
-                trace.push( a1[i] + a2[i] );
+                return a + a2[idx];
             }
             if(fn == 'subtract' || fn == '-'){
-                trace.push( a1[i] - a2[i] );
+                return a - a2[idx];
             }
-            if(fn == 'multiply' || fn == '-'){
-                trace.push( a1[i] * a2[i] );
+            if(fn == 'multiply' || fn == '*'){
+                return a * a2[idx];
             }
             if(fn == 'divide' || fn == '/'){
-                trace.push( a1[i] / a2[i] );
+                return a / a2[idx];
             }
-        }
+        });
     }
-
     else{
         return null;
     }
