@@ -2,10 +2,10 @@
  * The function transforms a given array by providing a second same length array, or a single number.
  * @access public
  * @function
- * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs'|'absorbance','absolute')} fn Available functions to transform the input array.
+ * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs'|'absorbance'|'absolute')} fn Available functions to transform the input array.
  * @param {number[]} a1 Input array.
  * @param {number|number[]} [a2] Second array or single number
- * @returns {number[]|void} Transformed array or null
+ * @returns {number[]|string|void} Transformed array, a string with an error message or null
  * @example TransformTrace('subtract', [1, 2, 3, 4], [0, 1, 2, 1]);
  * // returns [1, 1, 1, 3]
  *
