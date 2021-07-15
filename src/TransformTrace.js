@@ -149,21 +149,6 @@ function TransformTrace( fn, a1, a2 ) {
         }
     }
 
-    else if(typeof a2 == 'string'){
-        trace = a1.map(function(a){
-            if(fn == 'add' || fn == '+'){
-                return a + a2;
-            }
-            if(fn == 'subtract' || fn == '-'){
-                return a - a2;
-            }
-            if(fn == 'multiply' || fn == '*'){
-                return a * a2;
-            }
-            if(fn == 'divide' || fn == '/'){
-                return a / a2;
-            }
-        });
     }
 
     else if( Array.isArray(a2) ){
