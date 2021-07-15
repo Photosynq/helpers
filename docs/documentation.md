@@ -6,9 +6,9 @@ Extract every n-th element from an array.
 
 ### Parameters
 
--   `arr` **[Array][1]&lt;[number][2]>** Input array.
--   `size` **[number][2]** Step size. (optional, default `1`)
--   `idx` **[number][2]** Starting point. (optional, default `0`)
+*   `arr` **[Array][1]<[number][2]>** Input array.
+*   `size` **[number][2]** Step size. (optional, default `1`)
+*   `idx` **[number][2]** Starting point. (optional, default `0`)
 
 ### Examples
 
@@ -17,7 +17,7 @@ ArrayNth( [ 1, 2, 3, 4, 5, 6], 2, 2 );
 // returns [3, 5]
 ```
 
-Returns **([Array][1]&lt;[number][2]> | void)** Every n-th element.
+Returns **([Array][1]<[number][2]> | void)** Every n-th element.
 
 ## ArrayRange
 
@@ -26,10 +26,10 @@ All arguments must be integers.
 
 ### Parameters
 
--   `start` **[number][2]** Start value. (optional, default `0`)
--   `stop` **[number][2]** Stop value.
--   `step` **[number][2]** Step size. (optional, default `1`)
--   `transform` **(`"none"` \| `"log"` \| `"ln"` \| `"x2"`)** Generate a progression and transform numbers. (optional, default `"none"`)
+*   `start` **[number][2]** Start value. (optional, default `0`)
+*   `stop` **[number][2]** Stop value.
+*   `step` **[number][2]** Step size. (optional, default `1`)
+*   `transform` **(`"none"` | `"log"` | `"ln"` | `"x2"`)** Generate a progression and transform numbers. (optional, default `"none"`)
 
 ### Examples
 
@@ -59,15 +59,15 @@ ArrayRange(1,0);
 // returns []
 ```
 
-Returns **([Array][1]&lt;[number][2]> | void)** 
+Returns **([Array][1]<[number][2]> | void)** 
 
 ## ArrayUnZip
 
-This function transforms an array of [x, y] pairs into an object with an array of x and an array of y values
+This function transforms an array of \[x, y] pairs into an object with an array of x and an array of y values
 
 ### Parameters
 
--   `input` **[Array][1]&lt;[array][1]>** Array of [x, y] pairs.
+*   `input` **[Array][1]<[array][1]>** Array of \[x, y] pairs.
 
 ### Examples
 
@@ -76,7 +76,7 @@ ArrayUnZip( [ [1, 4], [2, 5], [3, 6] ] );
 //returns {x: [1, 2, 3], y: [4, 5, 6]}
 ```
 
-Returns **([object][3] | void)** { x: [x1, x2, ..., xn], y: [y1, y2, ..., yn] }
+Returns **([object][3] | void)** { x: \[x1, x2, ..., xn], y: \[y1, y2, ..., yn] }
 
 ## ArrayZip
 
@@ -85,8 +85,8 @@ Both arrays supplied need to have the same size.
 
 ### Parameters
 
--   `x` **[Array][1]&lt;[number][2]>** values.
--   `y` **[Array][1]&lt;[number][2]>** values.
+*   `x` **[Array][1]<[number][2]>** values.
+*   `y` **[Array][1]<[number][2]>** values.
 
 ### Examples
 
@@ -97,7 +97,7 @@ ArrayZip(x,y)
 //returns [ [1, 4], [2, 5], [3, 6] ]
 ```
 
-Returns **([Array][1]&lt;[number][2]> | void)** \[ [x1,y1], [x2,y2], ..., [xn,yn] ].
+Returns **([Array][1]<[number][2]> | void)** \[ \[x1,y1], \[x2,y2], ..., \[xn,yn] ].
 
 ## danger
 
@@ -106,8 +106,8 @@ Use these messages to indicate a problematic issue that will most likely result 
 
 ### Parameters
 
--   `msg` **[string][4]** Danger Message
--   `output` **[object][3]** object that is returned at the end
+*   `msg` **[string][4]** Danger Message
+*   `output` **[object][3]** object that is returned at the end
 
 ### Examples
 
@@ -127,9 +127,9 @@ indexes of matching labels is returned.
 
 ### Parameters
 
--   `label` **[string][4]** Label from the protocol set
--   `json` **[Object][3]** Required! The protocol content
--   `array` **[boolean][5]** Always return an array (optional, default `false`)
+*   `label` **[string][4]** Label from the protocol set
+*   `json` **[Object][3]** Required! The protocol content
+*   `array` **[boolean][5]** Always return an array (optional, default `false`)
 
 ### Examples
 
@@ -141,7 +141,7 @@ GetIndexByLabel( "PAM", json, true );
 // returns e.g. [1] or [1,2]
 ```
 
-Returns **([number][2] \| [Array][1]&lt;[number][2]>)** Single index or an array of indexes
+Returns **([number][2] | [Array][1]<[number][2]>)** Single index or an array of indexes
 
 ## GetLabelLookup
 
@@ -149,7 +149,7 @@ Generate a protocol lookup table for a protocol set.
 
 ### Parameters
 
--   `json` **[object][3]** 
+*   `json` **[object][3]** 
 
 ### Examples
 
@@ -169,9 +169,9 @@ protcol objects of matching labels is returned.
 
 ### Parameters
 
--   `label` **[string][4]** The label from the protocol set
--   `json` **[Object][3]** Required! The protocol content
--   `array` **[boolean][5]** Always return an array (optional, default `false`)
+*   `label` **[string][4]** The label from the protocol set
+*   `json` **[Object][3]** Required! The protocol content
+*   `array` **[boolean][5]** Always return an array (optional, default `false`)
 
 ### Examples
 
@@ -183,7 +183,7 @@ GetIndexByLabel( "PAM", json, true );
 // returns e.g. [{ "label": "PAM", ...}] or [{ "label": "PAM", ...}, { "label": "PAM", ...}]
 ```
 
-Returns **([Object][3] \| [Array][1]&lt;[Object][3]>)** Single protocol or an array of protocols
+Returns **([Object][3] | [Array][1]<[Object][3]>)** Single protocol or an array of protocols
 
 ## info
 
@@ -192,8 +192,8 @@ Use these messages to give additional information (if necessary).
 
 ### Parameters
 
--   `msg` **[string][4]** Info Message
--   `output` **[object][3]** object that is returned at the end
+*   `msg` **[string][4]** Info Message
+*   `output` **[object][3]** object that is returned at the end
 
 ### Examples
 
@@ -206,14 +206,13 @@ Returns **[object][3]** pushes the message into the output object.
 
 ## Math.abs
 
--   **See: [https://www.w3schools.com/jsref/jsref_abs.asp][6]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_abs.asp][6]
 
 Math.abs(x) returns the absolute value of x.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -228,14 +227,13 @@ Returns **[number][2]**
 
 ## Math.acos
 
--   **See: [https://www.w3schools.com/jsref/jsref_acos.asp][7]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_acos.asp][7]
 
 Math.acos(x) returns the arccosine of x, in radians.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -248,14 +246,13 @@ Returns **[number][2]**
 
 ## Math.asin
 
--   **See: [https://www.w3schools.com/jsref/jsref_asin.asp][8]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_asin.asp][8]
 
 Math.asin(x) returns the arcsine of x, in radians.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -268,14 +265,13 @@ Returns **[number][2]**
 
 ## Math.atan
 
--   **See: [https://www.w3schools.com/jsref/jsref_atan.asp][9]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_atan.asp][9]
 
 Math.atan(x) returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -288,15 +284,14 @@ Returns **[number][2]**
 
 ## Math.atan2
 
--   **See: [https://www.w3schools.com/jsref/jsref_atan2.asp][10]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_atan2.asp][10]
 
 Math.atan2(y, x) returns the arctangent of the quotient of its arguments.
 
 ### Parameters
 
--   `x` **[number][2]** 
--   `y` **[number][2]** 
+*   `x` **[number][2]** 
+*   `y` **[number][2]** 
 
 ### Examples
 
@@ -309,14 +304,13 @@ Returns **[number][2]**
 
 ## Math.ceil
 
--   **See: [https://www.w3schools.com/jsref/jsref_ceil.asp][11]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_ceil.asp][11]
 
 Math.ceil(x) returns the value of x rounded up to its nearest integer.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -329,14 +323,13 @@ Returns **[number][2]**
 
 ## Math.cos
 
--   **See: [https://www.w3schools.com/jsref/jsref_cos.asp][12]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_cos.asp][12]
 
 Math.cos(x) returns the cosine of x (x is in radians).
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -349,8 +342,7 @@ Returns **[number][2]**
 
 ## Math.E
 
--   **See: [https://www.w3schools.com/jsref/jsref_e.asp][13]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_e.asp][13]
 
 Euler's number (approx. 2.718).
 
@@ -365,14 +357,13 @@ Returns **[number][2]** 2.718281828459045
 
 ## Math.exp
 
--   **See: [https://www.w3schools.com/jsref/jsref_exp.asp][14]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_exp.asp][14]
 
 Math.exp(x) returns the value of Ex.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -385,14 +376,13 @@ Returns **[number][2]**
 
 ## Math.floor
 
--   **See: [https://www.w3schools.com/jsref/jsref_floor.asp][15]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_floor.asp][15]
 
 Math.floor(x) returns the value of x rounded down to its nearest integer.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -405,8 +395,7 @@ Returns **[number][2]**
 
 ## Math.LN10
 
--   **See: [https://www.w3schools.com/jsref/jsref_ln10.asp][16]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_ln10.asp][16]
 
 Natural logarithm of 10 (approx. 2.302).
 
@@ -421,8 +410,7 @@ Returns **[number][2]** 2.302585092994046
 
 ## Math.LN2
 
--   **See: [https://www.w3schools.com/jsref/jsref_ln2.asp][17]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_ln2.asp][17]
 
 Natural logarithm of 2 (approx. 0.693).
 
@@ -437,14 +425,13 @@ Returns **[number][2]** 0.6931471805599453
 
 ## Math.log
 
--   **See: [https://www.w3schools.com/jsref/jsref_log.asp][18]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_log.asp][18]
 
 Math.log(x) returns the natural logarithm (base E) of x.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -457,8 +444,7 @@ Returns **[number][2]**
 
 ## Math.LOG10E
 
--   **See: [https://www.w3schools.com/jsref/jsref_log10e.asp][19]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_log10e.asp][19]
 
 Base-10 logarithm of E (approx. 0.434).
 
@@ -473,8 +459,7 @@ Returns **[number][2]** 0.4342944819032518
 
 ## Math.LOG2E
 
--   **See: [https://www.w3schools.com/jsref/jsref_log2e.asp][20]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_log2e.asp][20]
 
 Base-2 logarithm of E (approx. 1.442).
 
@@ -489,14 +474,13 @@ Returns **[number][2]** 1.4426950408889634
 
 ## Math.max
 
--   **See: [https://www.w3schools.com/jsref/jsref_max.asp][21]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_max.asp][21]
 
 Math.max(x, y, z, ..., n) returns the number with the highest value.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -509,14 +493,13 @@ Returns **[number][2]**
 
 ## Math.min
 
--   **See: [https://www.w3schools.com/jsref/jsref_min.asp][22]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_min.asp][22]
 
 Math.min(x, y, z, ..., n) returns the number with the lowest value.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -529,8 +512,7 @@ Returns **[number][2]**
 
 ## Math.PI
 
--   **See: [https://www.w3schools.com/jsref/jsref_pi.asp][23]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_pi.asp][23]
 
 PI (approx. 3.14)
 
@@ -545,15 +527,14 @@ Returns **[number][2]** 3.141592653589793
 
 ## Math.pow
 
--   **See: [https://www.w3schools.com/jsref/jsref_pow.asp][24]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_pow.asp][24]
 
 Math.pow(x, y) returns the value of x to the power of y.
 
 ### Parameters
 
--   `x` **[number][2]** 
--   `y` **[number][2]** 
+*   `x` **[number][2]** 
+*   `y` **[number][2]** 
 
 ### Examples
 
@@ -566,8 +547,7 @@ Returns **[number][2]**
 
 ## Math.random
 
--   **See: [https://www.w3schools.com/jsref/jsref_random.asp][25]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_random.asp][25]
 
 Random number
 
@@ -582,14 +562,13 @@ Returns **[number][2]** between 0 and 1
 
 ## Math.round
 
--   **See: [https://www.w3schools.com/jsref/jsref_round.asp][26]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_round.asp][26]
 
 Math.round(x) returns the value of x rounded to its nearest integer.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -604,14 +583,13 @@ Returns **[number][2]**
 
 ## Math.sin
 
--   **See: [https://www.w3schools.com/jsref/jsref_sin.asp][27]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_sin.asp][27]
 
 Math.sin(x) returns the sine of x (x is in radians).
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -624,14 +602,13 @@ Returns **[number][2]**
 
 ## Math.sqrt
 
--   **See: [https://www.w3schools.com/jsref/jsref_sqrt.asp][28]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_sqrt.asp][28]
 
 Math.sqrt(x) returns the square root of x.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -642,10 +619,9 @@ Math.sqrt(2);
 
 Returns **[number][2]** 
 
-## Math.SQRT1_2
+## Math.SQRT1\_2
 
--   **See: [https://www.w3schools.com/jsref/jsref_sqrt1_2.asp][29]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_sqrt1\_2.asp][29]
 
 Square root of 1/2 (approx. 0.707).
 
@@ -660,8 +636,7 @@ Returns **[number][2]** 0.7071067811865476
 
 ## Math.SQRT2
 
--   **See: [https://www.w3schools.com/jsref/jsref_sqrt2.asp][30]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_sqrt2.asp][30]
 
 Square root of 2 (approx. 1.414).
 
@@ -676,14 +651,13 @@ Returns **[number][2]** 1.4142135623730951
 
 ## Math.tan
 
--   **See: [https://www.w3schools.com/jsref/jsref_tan.asp][31]
-    **
+*   **See**: [https://www.w3schools.com/jsref/jsref_tan.asp][31]
 
 Math.tan(x) returns the tangent of an angle.
 
 ### Parameters
 
--   `x` **[number][2]** 
+*   `x` **[number][2]** 
 
 ### Examples
 
@@ -701,7 +675,7 @@ A and t are the fitted variables, the provided input array needs to be an array 
 
 ### Parameters
 
--   `input_raw` **[Array][1]&lt;[array][1]>** Input x,y value pairs \[ [x1,y1], [x2,y2], ..., [xn,yn] ].
+*   `input_raw` **[Array][1]<[array][1]>** Input x,y value pairs \[ \[x1,y1], \[x2,y2], ..., \[xn,yn] ].
 
 ### Examples
 
@@ -723,13 +697,13 @@ Returns **[object][3]** Results from fit including points, values for A and t, e
 
 ## MathLINREG
 
-Function to perform a simple linear regression (y = mx +b), returning slope, y-intercent, 
+Function to perform a simple linear regression (y = mx +b), returning slope, y-intercent,
 correlation coefficient (R) and coefficient of determination (R²).
 
 ### Parameters
 
--   `x` **[Array][1]&lt;[number][2]>** x-values
--   `y` **[Array][1]&lt;[number][2]>** y-values
+*   `x` **[Array][1]<[number][2]>** x-values
+*   `y` **[Array][1]<[number][2]>** y-values
 
 ### Examples
 
@@ -751,7 +725,7 @@ Returns the natural logarithm (base E) of a number.
 
 ### Parameters
 
--   `value` **[number][2]** 
+*   `value` **[number][2]** 
 
 ### Examples
 
@@ -768,7 +742,7 @@ Returns the logarithm (base 10) of a number.
 
 ### Parameters
 
--   `value` **[number][2]** 
+*   `value` **[number][2]** 
 
 ### Examples
 
@@ -786,7 +760,7 @@ if the array is empty or has invalid values.
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -804,7 +778,7 @@ if the array is empty or has invalid values.
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -822,7 +796,7 @@ if the array is empty or has invalid values.
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -840,7 +814,7 @@ if the array is empty or has invalid values.
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -857,7 +831,7 @@ Multiple Linear Regression
 
 ### Parameters
 
--   `input_raw` **[Array][1]&lt;[array][1]>** Array of x,y value pairs arrays \[ \[ [x1,y1], [x2,y2], ..., [xn,yn] ], \[ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
+*   `input_raw` **[Array][1]<[array][1]>** Array of x,y value pairs arrays \[ \[ \[x1,y1], \[x2,y2], ..., \[xn,yn] ], \[ \[x1,y1], \[x2,y2], ..., \[xn,yn] ] ]
 
 ### Examples
 
@@ -879,9 +853,9 @@ Polynomial fit to y = a0 + a1x + a2x^2 + a3x^3....
 
 ### Parameters
 
--   `input_raw` **[Array][1]&lt;[array][1]>** Array of x,y value pairs arrays \[ \[ [x1,y1], [x2,y2], ..., [xn,yn] ], \[ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
--   `degree`  
--   `size` **degree** degree.
+*   `input_raw` **[Array][1]<[array][1]>** Array of x,y value pairs arrays \[ \[ \[x1,y1], \[x2,y2], ..., \[xn,yn] ], \[ \[x1,y1], \[x2,y2], ..., \[xn,yn] ] ]
+*   `degree`  
+*   `size` **degree** degree.
 
 ### Examples
 
@@ -903,8 +877,8 @@ Calculate the variance from an array of numbers. The function fails if the array
 
 ### Parameters
 
--   `value` **[number][2]** 
--   `digets` **[number][2]** number of digits (optional, default `2`)
+*   `value` **[number][2]** 
+*   `digets` **[number][2]** number of digits (optional, default `2`)
 
 ### Examples
 
@@ -921,7 +895,7 @@ Calculate the standard error from an array of numbers. The function fails if the
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -938,7 +912,7 @@ Calculate the variance from an array of numbers. The function fails if the array
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -955,7 +929,7 @@ Calculate the variance from an array of numbers. The function fails if the array
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -972,7 +946,7 @@ Calculate the sum from an array of numbers. The function fails if the array is e
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -989,7 +963,7 @@ Calculate the variance from an array of numbers. The function fails if the array
 
 ### Parameters
 
--   `values` **[Array][1]&lt;[number][2]>** numbers
+*   `values` **[Array][1]<[number][2]>** numbers
 
 ### Examples
 
@@ -1002,35 +976,35 @@ Returns **[number][2]**
 
 ## NonLinearRegression
 
--   **See: [http://statpages.info/nonlin.html][32]
-    **
+*   **See**: [http://statpages.info/nonlin.html][32]
 
 Function to perform a non-linear regression.
 
 ### Parameters
 
--   `data` **[object][3]** Data for the non-linear regression needs to be provided as an array of x,y pairs. `[[x1,y1], [x2,y2], ..., [xn,yn]]`
--   `options` **[object][3]** 
-    -   `options.equation` **([string][4] \| [function][33])** Select preset equation (string) or supply function
-    -   `options.initial` **[Array][1]&lt;[number][2]>** Array with the initial guesses for parameters in equation [a, b, ..., h]
-    -   `options.iterations` **[number][2]** Number of iterations (maximum 2000) (optional, default `200`)
-    -   `options.cPts` **[number][2]?** Number of datapoints
-    -   `options.cVar` **[number][2]** Number of independant variables
-    -   `options.cPar` **[number][2]** Number of parameters
-    -   `options.RelaxF` **[number][2]** Fractional adjustment factor (Values smaller than 1 will make the covergence slower but more stable) (optional, default `1.0`)
-    -   `options.SEy` **(`1` \| `"Y"` \| `"Sqrt(Y)"` \| `"w"` \| `"Rep"`)** Standard Error associated with the Y variable (Equal `1`, Relative `Y`, Counts `Sqrt(Y)`, Data `w`, Replicates `Rep` (optional, default `1`)
-    -   `options.yTrans` **(`"Y"` \| `"LN(Y)"` \| `"SQRT(Y)"` \| `"1/Y"`)** Transformation (optional, default `"Y"`)
-    -   `options.x1Trans` **(`"X1"` \| `"LN(X1)"` \| `"SQRT(X1)"` \| `"1/X1"`)** Transformation (optional, default `"X1"`)
-    -   `options.x2Trans` **(`"X2"` \| `"LN(X2)"` \| `"SQRT(X2)"` \| `"1/X2"`)** Transformation (optional, default `"X2"`)
-    -   `options.x3Trans` **(`"X3"` \| `"LN(X3)"` \| `"SQRT(X3)"` \| `"1/X3"`)** Transformation (optional, default `"X3"`)
-    -   `options.x4Trans` **(`"X4"` \| `"LN(X4)"` \| `"SQRT(X4)"` \| `"1/X4"`)** Transformation (optional, default `"X4"`)
-    -   `options.x5Trans` **(`"X5"` \| `"LN(X5)"` \| `"SQRT(X5)"` \| `"1/X5"`)** Transformation (optional, default `"X5"`)
-    -   `options.x6Trans` **(`"X6"` \| `"LN(X6)"` \| `"SQRT(X6)"` \| `"1/X6"`)** Transformation (optional, default `"X6"`)
-    -   `options.x7Trans` **(`"X7"` \| `"LN(X7)"` \| `"SQRT(X7)"` \| `"1/X7"`)** Transformation (optional, default `"X7"`)
-    -   `options.x8Trans` **(`"X8"` \| `"LN(X8)"` \| `"SQRT(X8)"` \| `"1/X8"`)** Transformation (optional, default `"X8"`)
-    -   `options.Centered` **[boolean][5]** Centered Approximation to Partial Derivatives (optional, default `false`)
-    -   `options.LeastAbs` **[boolean][5]** Least-Absolute -Value curve fitting (optional, default `false`)
-    -   `options.cPctile` **[number][2]** Percentile (optional, default `50`)
+*   `data` **[object][3]** Data for the non-linear regression needs to be provided as an array of x,y pairs. `[[x1,y1], [x2,y2], ..., [xn,yn]]`
+*   `options` **[object][3]** 
+
+    *   `options.equation` **([string][4] | [function][33])** Select preset equation (string) or supply function
+    *   `options.initial` **[Array][1]<[number][2]>** Array with the initial guesses for parameters in equation \[a, b, ..., h]
+    *   `options.iterations` **[number][2]** Number of iterations (maximum 2000) (optional, default `200`)
+    *   `options.cPts` **[number][2]?** Number of datapoints
+    *   `options.cVar` **[number][2]** Number of independant variables
+    *   `options.cPar` **[number][2]** Number of parameters
+    *   `options.RelaxF` **[number][2]** Fractional adjustment factor (Values smaller than 1 will make the covergence slower but more stable) (optional, default `1.0`)
+    *   `options.SEy` **(`1` | `"Y"` | `"Sqrt(Y)"` | `"w"` | `"Rep"`)** Standard Error associated with the Y variable (Equal `1`, Relative `Y`, Counts `Sqrt(Y)`, Data `w`, Replicates `Rep` (optional, default `1`)
+    *   `options.yTrans` **(`"Y"` | `"LN(Y)"` | `"SQRT(Y)"` | `"1/Y"`)** Transformation (optional, default `"Y"`)
+    *   `options.x1Trans` **(`"X1"` | `"LN(X1)"` | `"SQRT(X1)"` | `"1/X1"`)** Transformation (optional, default `"X1"`)
+    *   `options.x2Trans` **(`"X2"` | `"LN(X2)"` | `"SQRT(X2)"` | `"1/X2"`)** Transformation (optional, default `"X2"`)
+    *   `options.x3Trans` **(`"X3"` | `"LN(X3)"` | `"SQRT(X3)"` | `"1/X3"`)** Transformation (optional, default `"X3"`)
+    *   `options.x4Trans` **(`"X4"` | `"LN(X4)"` | `"SQRT(X4)"` | `"1/X4"`)** Transformation (optional, default `"X4"`)
+    *   `options.x5Trans` **(`"X5"` | `"LN(X5)"` | `"SQRT(X5)"` | `"1/X5"`)** Transformation (optional, default `"X5"`)
+    *   `options.x6Trans` **(`"X6"` | `"LN(X6)"` | `"SQRT(X6)"` | `"1/X6"`)** Transformation (optional, default `"X6"`)
+    *   `options.x7Trans` **(`"X7"` | `"LN(X7)"` | `"SQRT(X7)"` | `"1/X7"`)** Transformation (optional, default `"X7"`)
+    *   `options.x8Trans` **(`"X8"` | `"LN(X8)"` | `"SQRT(X8)"` | `"1/X8"`)** Transformation (optional, default `"X8"`)
+    *   `options.Centered` **[boolean][5]** Centered Approximation to Partial Derivatives (optional, default `false`)
+    *   `options.LeastAbs` **[boolean][5]** Least-Absolute -Value curve fitting (optional, default `false`)
+    *   `options.cPctile` **[number][2]** Percentile (optional, default `50`)
 
 ### Examples
 
@@ -1110,9 +1084,9 @@ The function transforms a given array by providing a second same length array, o
 
 ### Parameters
 
--   `fn` **(`"add"` \| `"subtract"` \| `"multiply"` \| `"divide"` \| `"+"` \| `"-"` \| `"*"` \| `"/"` \| `"normToMin"` \| `"normToMax"` \| `"normToRange"` \| `"normToIdx"` \| `"normToVal"` \| `"ma"` \| `"sgf"` \| `"abs"`)** Available functions to transform the input array.
--   `a1` **[Array][1]&lt;[number][2]>** Input array.
--   `a2` **([number][2] \| [Array][1]&lt;[number][2]>)?** Second array or single number
+*   `fn` **(`"add"` | `"subtract"` | `"multiply"` | `"divide"` | `"+"` | `"-"` | `"*"` | `"/"` | `"normToMin"` | `"normToMax"` | `"normToRange"` | `"normToIdx"` | `"normToVal"` | `"ma"` | `"sgf"` | `"abs"` | `"absorbance"` | `"absolute"`)** Available functions to transform the input array.
+*   `a1` **[Array][1]<[number][2]>** Input array.
+*   `a2` **([number][2] | [Array][1]<[number][2]>)?** Second array or single number
 
 ### Examples
 
@@ -1146,8 +1120,8 @@ TransformTrace('normToVal', [1, 2, 3, 4], 2);
 TransformTrace('ma', [1.5, 2, 3, 4]);
 // returns [1.6667, 2.1665, 3, 3.6665]
 
-TransformTrace('sgf', [1, 2, 3, 4]);
-// returns [6, 7, 8, 9]
+TransformTrace('sgf', [1,2,3,4,3,2,1,1]);
+// returns [1.3333333333333333,1.9523809523809523]
 
 // Absorbance (abs) -log(I/I0)
 
@@ -1155,12 +1129,19 @@ TransformTrace('sgf', [1, 2, 3, 4]);
 TransformTrace('abs', [1.5, 2, 3, 4]);
 // returns [-0, -0.12494, -0.30103, -0.42597]
 
+TransformTrace('absorbance', [1.5, 2, 3, 4]);
+// returns [-0, -0.12494, -0.30103, -0.42597]
+
 // The provided value is I0
 TransformTrace('abs', [1.5, 2, 3, 4], 1);
 // returns [-0.1761, -0.3010, -0.4771, -0.6021]
+
+// Absolute numbers
+TransformTrace('absolute', [1, -2, 3, -4]);
+// returns [1, 2, 3, 4]
 ```
 
-Returns **([Array][1]&lt;[number][2]> | void)** Transformed array or null
+Returns **([Array][1]<[number][2]> | [string][4] | void)** Transformed array, a string with an error message or null
 
 ## warning
 
@@ -1169,8 +1150,8 @@ Use these messages to indicate a potential issue and direct the user to check th
 
 ### Parameters
 
--   `msg` **[string][4]** Warning Message
--   `output` **[object][3]** object that is returned at the end
+*   `msg` **[string][4]** Warning Message
+*   `output` **[object][3]** object that is returned at the end
 
 ### Examples
 

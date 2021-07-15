@@ -1,4 +1,708 @@
+// Functions as shown below have been developed based of Numeric or
+// taken from Numeric (https://github.com/sloisel/numeric). See the
+// licence in ./rescources/Numeric-LICENCE.md
+
 /**
+ * Multiple Linear Regression
+ * @access public
+ * @function
+ * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
+ * @returns {object} Returns rsquared, slopes and points.
+ * @example MathEXPINVREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ] );
+ * // returns
+ * {
+ *   "rsquared": rSq,
+ *   "slopes": [slope1, ...],
+ *   "points": [ [x1, x2, ..., xn], [y1, y2, ..., yn] ]
+ * }
+ */
+function MathMULTREG(input_raw) {
+
+	if(input_raw === undefined || !Array.isArray( input_raw ))
+        return null;
+
+	//do some basic transforms on the data to get it to useable form
+	var numPredictors = input_raw[0].length - 1;
+	var input = [];
+
+	for (var i = 0; i < input_raw[0].length; i++) {
+		var temp = [];
+		for (var j = 0; j < input_raw.length; j++) {
+			temp.push(input_raw[j][i]);
+		}
+		input.push(temp);
+	}
+
+
+	var x = [];
+	var ones = [];
+	for (i = 0; i < input[0].length; i++) {
+		ones.push(1);
+	}
+
+	x.push(ones);
+	var retX = [];
+	for (i = 0; i < numPredictors; i++) {
+		x.push(input[i]);
+		retX.push(input[i]);
+	}
+
+	var y = input[numPredictors];
+
+	//do the actual fit
+	x = transpose(x);
+
+	var qr = QRDecomp(x);
+
+	var results = dot(inv(qr.R), dot(transpose(qr.Q), y));
+
+	//calculate the rsquared value
+	var sum = 0;
+	for (i = 0; i < y.length; i++) {
+		sum += y[i];
+	}
+
+	var responseAvg = sum / y.length;
+
+	var yHat = [];
+
+	for (i = 0; i < y.length; i++) {
+		var yTemp = 0;
+		for (j = 0; j < numPredictors; j++) {
+			yTemp += results[j + 1] * x[i][j + 1];
+		}
+		yTemp += results[0];
+		yHat.push(yTemp);
+	}
+
+	var SSM = 0;
+	var SSTO = 0;
+
+	for (i = 0; i < y.length; i++) {
+		SSM += ((yHat[i] - responseAvg) * (yHat[i] - responseAvg));
+		SSTO += ((y[i] - responseAvg) * (y[i] - responseAvg));
+	}
+
+	var rSq = SSM / SSTO;
+
+	return {
+		"rsquared": rSq,
+		"slopes": results,
+		"points": [retX, yHat]
+	};
+
+}
+
+/**
+ * Fit exponential decay to Y = Y0 + Ae^(-x/t)
+ * A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.
+ * @access public
+ * @function
+ * @param {array[]} input_raw Input x,y value pairs [ [x1,y1], [x2,y2], ..., [xn,yn] ].
+ * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope.
+ * @example MathEXPINVREG( [ [x1,y1], [x2,y2], ..., [xn,yn] ] );
+ * // returns
+ * {
+ *   "points": [ [x1,y1], [x2,y2], ..., [xn,yn] ],
+ * 	 "results": [A, t],
+ * 	 "error": yError,
+ *   "asymptote": asymptote,
+ *   "rsquared": linReg.rsquared,
+ *   "lifetime": lifetime,
+ * 	 "slope": slope
+ * }
+ */
+function MathEXPINVREG(input_raw) {
+
+	if(input_raw === undefined || !Array.isArray( input_raw ))
+        return null;
+
+	//calculate the approximate asymptote
+	var y = [];
+	for (i = 0; i < input_raw.length; i++) {
+		y.push(input_raw[i][1]);
+	}
+
+	//trapezoidal riemann sum assuming spaced evenly
+	var riemann = 0;
+	var riemannSq = 0;
+	for (i = 0; i < y.length - 1; i++) {
+		temp = (y[i] + y[i + 1]) / 2;
+		riemann += temp;
+		temp = (Math.pow(y[i], 2) + Math.pow(y[i + 1], 2)) / 2;
+		riemannSq += temp;
+	}
+
+	var asymptote = (riemannSq - riemann * (y[0] + y[y.length - 1]) / 2) /
+		(riemann - y.length * (y[0] + y[y.length - 1]) / 2);
+
+	//calculate with linear regression on the linear equation ln(Y) = ln(A) - x/t
+	var input_transformed = clone(input_raw);
+	for (var i = 0; i < input_raw.length; i++) {
+		temp = input_raw[i][1] - asymptote;
+		if (temp < 0) {
+			temp = -1 * temp;
+		}
+		input_transformed[i][1] = MathLN(temp);
+	}
+
+
+
+	var constants = [0.5];
+
+	var t2 = 50;
+	var t2_old;
+	var t, A;
+	for (i = 0; i < 10; i++) {
+
+		if (t2 < 2) {
+			t = -999999;
+			A = 0;
+			break;
+		}
+
+		t2_old = t2;
+		var linReg = MathMULTREG(input_transformed.slice(0, t2));
+
+		t2 = MathROUND((-1 / linReg.slopes[1]) * constants[0], 0);
+		if (i == 9) {
+			t2 = (t2 > t2_old) ? t2 : t2_old;
+			linReg = MathMULTREG(input_transformed.slice(0, t2));
+		}
+
+		t = linReg.slopes[1];
+		A = Math.pow(Math.E, linReg.slopes[0]);
+
+	}
+
+
+
+	var points = [];
+	for (i = 0; i < input_raw.length; i++) {
+		var temp = [];
+		temp.push(input_raw[i][0]);
+		temp.push(A * Math.pow(Math.E, input_raw[i][0] * t) + asymptote);
+		points.push(temp);
+	}
+
+	var yError = 0;
+	for (i = 0; i < input_raw.length; i++) {
+		yError += Math.pow(A * Math.pow(Math.E, input_raw[i][0] * t) - input_raw[i][1] + asymptote, 2);
+	}
+
+	yError /= input_raw.length - 1;
+
+	var lifetime = (-1 / t);
+	var slope = -1 * A * t;
+
+	return {
+		points: points,
+		results: [A, t],
+		error: yError,
+		asymptote: asymptote,
+		rsquared: linReg.rsquared,
+		lifetime: lifetime,
+		slope: slope
+	};
+}
+
+/**
+ * Polynomial fit to y = a0 + a1x + a2x^2 + a3x^3....
+ * @access public
+ * @function
+ * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
+ * @param {degree} size degree.
+ * @returns {object} Returns points, slopes and error
+ * @example MathPOLYREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ], degree );
+ * // returns
+ * {
+ *   "points": points,
+ *   "slopes": slopes,
+ *   "error": yError
+ * }
+ */
+function MathPOLYREG(input_raw, degree) {
+	var transformed_nums = [];
+	for (var i = 0; i < input_raw.length; i++) {
+		var temp = [];
+		for (var j = 1; j < degree + 1; j++) {
+			temp.push(Math.pow(input_raw[i][0], j))
+		}
+		temp.push(input_raw[i][1]);
+		transformed_nums.push(temp);
+	}
+
+	var polyReg = MathMULTREG(transformed_nums);
+
+	var slopes = polyReg.slopes;
+
+	var points = [];
+	var yError = 0;
+	for (i = 0; i < input_raw.length; i++) {
+		temp = [];
+		var yHat = 0;
+		temp.push(input_raw[i][0]);
+		for (j = 0; j < degree + 1; j++) {
+			yHat += (Math.pow(input_raw[i][0], degree) * slopes[j]);
+		}
+		temp.push(yHat);
+		points.push(temp);
+
+		yError += Math.pow((yHat - input_raw[i][1]), 2);
+	}
+
+	yError /= input_raw.length - 1;
+
+	return {
+		"points": points,
+		"slopes": slopes,
+		"error": yError
+	};
+
+}
+
+// helper functions for the functions above
+
+//intended for vectors of equal size
+function subVV(vec1, vec2) {
+	var ret = [];
+	for (var i = 0; i < vec1.length; i++) {
+		ret.push(vec1[i] - vec2[i]);
+	}
+
+	return ret;
+}
+
+function proj(vec1, vec2) {
+	var denom = innerProd(vec1, vec1);
+	var numer = innerProd(vec1, vec2);
+
+	var vec3 = [];
+
+	for (var i = 0; i < vec1.length; i++) {
+		vec3[i] = (numer / denom) * vec1[i];
+	}
+
+	return vec3;
+}
+
+function innerProd(vec1, vec2) {
+	if (vec1.length == vec2.length) {
+		var ans = 0;
+		for (var i = 0; i < vec1.length; i++) {
+			ans += vec1[i] * vec2[i];
+		}
+
+		return ans;
+	}
+}
+
+function normal(vec) {
+	var norm = 0;
+	for (var i = 0; i < vec.length; i++) {
+		norm += vec[i] * vec[i];
+	}
+	norm = Math.sqrt(norm);
+
+	return norm;
+}
+
+//source: http://www.learninglover.com/examples.php?id=79
+function QRDecomp(A) {
+	var aVectors = transpose(A);
+	var uVector = [];
+	var eVector = [];
+	var eVectorTxt = [];
+	var sum = [];
+
+	var testTest = [];
+
+	for (var i = 0; i < aVectors.length; i++) {
+		uVector[i] = [];
+		for (var j = 0; j < aVectors[i].length; j++) {
+			sum[j] = 0;
+		}
+
+		for (j = 0; j < i; j++) {
+			var temp = proj(eVector[j], aVectors[i]);
+			for (k = 0; k < temp.length; k++) {
+				sum[k] += temp[k];
+			}
+		}
+
+		for (j = 0; j < aVectors[i].length; j++) {
+			uVector[i][j] = aVectors[i][j] - sum[j];
+		}
+
+		var norm = normal(uVector[i]);
+
+		eVector[i] = [];
+		eVectorTxt[i] = [];
+
+		for (j = 0; j < aVectors[i].length; j++) {
+			eVector[i][j] = uVector[i][j] / norm;
+			eVectorTxt[i][j] = uVector[i][j] + " / " + norm;
+		}
+
+
+	}
+
+	for (i = 0; i < aVectors.length; i++) {
+		testTest[i] = [];
+		for (j = 0; j < aVectors[i].length; j++) {
+			testTest[i][j] = 0;
+		}
+
+		for (j = 0; j <= i; j++) {
+			var tempVec = innerProd(aVectors[i], eVector[j]);
+
+			for (var k = 0; k < eVector[i].length; k++) {
+				testTest[i][k] += eVector[j][k] * tempVec;
+			}
+		}
+
+
+	}
+
+	eVector = transpose(eVector);
+	eVectorTxt = transpose(eVectorTxt);
+	var decomp = {};
+	decomp.Q = [];
+
+	for (i = 0; i < eVector.length; i++) {
+		decomp.Q[i] = eVectorTxt[i];
+	}
+
+	for (i = 0; i < eVector.length; i++) {
+		decomp.Q[i] = eVector[i];
+	}
+
+	decomp.R = dot(transpose(decomp.Q), A);
+
+	return decomp;
+}
+
+//helper from numeric.js library
+function transpose(x) {
+	var i, j, m = x.length,
+		n = x[0].length,
+		ret = new Array(n),
+		A0, A1, Bj;
+	for (j = 0; j < n; j++) ret[j] = new Array(m);
+	for (i = m - 1; i >= 1; i -= 2) {
+		A1 = x[i];
+		A0 = x[i - 1];
+		for (j = n - 1; j >= 1; --j) {
+			Bj = ret[j];
+			Bj[i] = A1[j];
+			Bj[i - 1] = A0[j];
+			--j;
+			Bj = ret[j];
+			Bj[i] = A1[j];
+			Bj[i - 1] = A0[j];
+		}
+		if (j === 0) {
+			Bj = ret[0];
+			Bj[i] = A1[0];
+			Bj[i - 1] = A0[0];
+		}
+	}
+	if (i === 0) {
+		A0 = x[0];
+		for (j = n - 1; j >= 1; --j) {
+			ret[j][0] = A0[j];
+			--j;
+			ret[j][0] = A0[j];
+		}
+		if (j === 0) {
+			ret[0][0] = A0[0];
+		}
+	}
+	return ret;
+}
+
+function _getCol(A, j, x) {
+	var n = A.length,
+		i;
+	for (i = n - 1; i > 0; --i) {
+		x[i] = A[i][j];
+		--i;
+		x[i] = A[i][j];
+	}
+	if (i === 0) x[0] = A[0][j];
+}
+
+function dotVV(x, y) {
+	var i, n = x.length,
+		i1, ret = x[n - 1] * y[n - 1];
+	for (i = n - 2; i >= 1; i -= 2) {
+		i1 = i - 1;
+		ret += x[i] * y[i] + x[i1] * y[i1];
+	}
+	if (i === 0) {
+		ret += x[0] * y[0];
+	}
+	return ret;
+}
+
+function dotMMbig(x, y) {
+	var gc = _getCol,
+		p = y.length,
+		v = new Array(p);
+	var m = x.length,
+		n = y[0].length,
+		A = new Array(m),
+		xj;
+	var VV = dotVV;
+	var i, j;
+	--p;
+	--m;
+	for (i = m; i !== -1; --i) A[i] = new Array(n);
+	--n;
+
+	for (i = n; i !== -1; --i) {
+		gc(y, i, v);
+		for (j = m; j !== -1; --j) {
+			xj = x[j];
+			A[j][i] = VV(xj, v);
+		}
+	}
+
+	return A;
+}
+
+function _dim(x) {
+	var ret = [];
+	while (typeof x === "object") {
+		ret.push(x.length);
+		x = x[0];
+	}
+	return ret;
+}
+
+function dim(x) {
+	var y, z;
+	if (typeof x === "object") {
+		y = x[0];
+		if (typeof y === "object") {
+			z = y[0];
+			if (typeof z === "object") {
+				return _dim(x);
+			}
+			return [x.length, y.length];
+		}
+		return [x.length];
+	}
+	return [];
+}
+
+function clone(input) {
+	var ret = [];
+	for (var i = 0; i < input.length; i++) {
+		var temp = [];
+		for (var j = 0; j < input[0].length; j++) {
+			temp.push(input[i][j]);
+		}
+		ret.push(temp);
+	}
+
+	return ret;
+}
+
+function diag(d) {
+	var i, i1, j, n = d.length,
+		A = new Array(n),
+		Ai;
+	for (i = n - 1; i >= 0; i--) {
+		Ai = new Array(n);
+		i1 = i + 2;
+		for (j = n - 1; j >= i1; j -= 2) {
+			Ai[j] = 0;
+			Ai[j - 1] = 0;
+		}
+		if (j > i) {
+			Ai[j] = 0;
+		}
+		Ai[i] = d[i];
+		for (j = i - 1; j >= 1; j -= 2) {
+			Ai[j] = 0;
+			Ai[j - 1] = 0;
+		}
+		if (j === 0) {
+			Ai[0] = 0;
+		}
+		A[i] = Ai;
+	}
+	return A;
+}
+
+function rep(s, v, k) {
+	if (typeof k === "undefined") {
+		k = 0;
+	}
+	var n = s[k],
+		ret = new Array(n),
+		i;
+	if (k === s.length - 1) {
+		for (i = n - 2; i >= 0; i -= 2) {
+			ret[i + 1] = v;
+			ret[i] = v;
+		}
+		if (i === -1) {
+			ret[0] = v;
+		}
+		return ret;
+	}
+	for (i = n - 1; i >= 0; i--) {
+		ret[i] = rep(s, v, k + 1);
+	}
+	return ret;
+}
+
+function identity(n) {
+	return diag(rep([n], 1));
+}
+
+function inv(x) {
+	var s = dim(x),
+		abs = Math.abs,
+		m = s[0],
+		n = s[1];
+	var A = clone(x),
+		Ai, Aj;
+	var I = identity(m),
+		Ii, Ij;
+	var i, j, k;
+	for (j = 0; j < n; ++j) {
+		var i0 = -1;
+		var v0 = -1;
+		for (i = j; i !== m; ++i) {
+			k = abs(A[i][j]);
+			if (k > v0) {
+				i0 = i;
+				v0 = k;
+			}
+		}
+		Aj = A[i0];
+		A[i0] = A[j];
+		A[j] = Aj;
+		Ij = I[i0];
+		I[i0] = I[j];
+		I[j] = Ij;
+		x = Aj[j];
+		for (k = j; k !== n; ++k) Aj[k] /= x;
+		for (k = n - 1; k !== -1; --k) Ij[k] /= x;
+		for (i = m - 1; i !== -1; --i) {
+			if (i !== j) {
+				Ai = A[i];
+				Ii = I[i];
+				x = Ai[j];
+				for (k = j + 1; k !== n; ++k) Ai[k] -= Aj[k] * x;
+				for (k = n - 1; k > 0; --k) {
+					Ii[k] -= Ij[k] * x;
+					--k;
+					Ii[k] -= Ij[k] * x;
+				}
+				if (k === 0) Ii[0] -= Ij[0] * x;
+			}
+		}
+	}
+	return I;
+}
+
+function dotMV(x, y) {
+	var p = x.length,
+		i;
+	var ret = new Array(p);
+	var VV = dotVV;
+	for (i = p - 1; i >= 0; i--) {
+		ret[i] = VV(x[i], y);
+	}
+	return ret;
+}
+
+function dotVM(x, y) {
+	var j, k, p, q, ret, woo, i0;
+	p = x.length;
+	q = y[0].length;
+	ret = new Array(q);
+	for (k = q - 1; k >= 0; k--) {
+		woo = x[p - 1] * y[p - 1][k];
+		for (j = p - 2; j >= 1; j -= 2) {
+			i0 = j - 1;
+			woo += x[j] * y[j][k] + x[i0] * y[i0][k];
+		}
+		if (j === 0) {
+			woo += x[0] * y[0][k];
+		}
+		ret[k] = woo;
+	}
+	return ret;
+}
+
+function dotMMsmall(x, y) {
+	var i, j, k, p, q, r, ret, foo, bar, woo, i0;
+	p = x.length;
+	q = y.length;
+	r = y[0].length;
+	ret = new Array(p);
+	for (i = p - 1; i >= 0; i--) {
+		foo = new Array(r);
+		bar = x[i];
+		for (k = r - 1; k >= 0; k--) {
+			woo = bar[q - 1] * y[q - 1][k];
+			for (j = q - 2; j >= 1; j -= 2) {
+				i0 = j - 1;
+				woo += bar[j] * y[j][k] + bar[i0] * y[i0][k];
+			}
+			if (j === 0) {
+				woo += bar[0] * y[0][k];
+			}
+			foo[k] = woo;
+		}
+		ret[i] = foo;
+	}
+	return ret;
+}
+
+function mulVS(x, y) {
+	for (var i = 0; i < x.length; i++) {
+		x[i] = x[i] * y;
+	}
+
+	return x;
+}
+
+function mulSV(x, y) {
+	for (var i = 0; i < y.length; i++) {
+		y[i] = y[i] * x;
+	}
+
+	return y;
+}
+
+function dot(x, y) {
+	var d = dim;
+	switch (d(x).length * 1000 + d(y).length) {
+		case 2002:
+			if (y.length < 10) return dotMMsmall(x, y);
+			else return dotMMbig(x, y);
+		case 2001:
+			return dotMV(x, y);
+		case 1002:
+			return dotVM(x, y);
+		case 1001:
+			return dotVV(x, y);
+		case 1000:
+			return mulVS(x, y);
+		case 1:
+			return mulSV(x, y);
+		case 0:
+			return x * y;
+		default:
+			throw new Error('numeric.dot only works on vectors and matrices');
+	}
+}/**
  * Extract every n-th element from an array.
  * @access public
  * @function
@@ -793,7 +1497,313 @@ function danger(msg, output) {
 		output.messages.danger = [];
 	output.messages.danger.push(msg);
 }
-// Script modified based of the calculator found on http://statpages.info/nonlin.html
+/**
+ * Math.abs(x) returns the absolute value of x.
+ * @see {@link https://www.w3schools.com/jsref/jsref_abs.asp}
+ * @access public
+ * @function
+ * @name Math.abs
+ * @param {number} x
+ * @returns {number}
+ * @example Math.abs(4.7);
+ * // returns 5
+ * Math.abs(4.4);
+ * // returns 4;
+ */
+
+/**
+ * Math.acos(x) returns the arccosine of x, in radians.
+ * @see {@link https://www.w3schools.com/jsref/jsref_acos.asp}
+ * @access public
+ * @function
+ * @name Math.acos
+ * @param {number} x
+ * @returns {number}
+ * @example Math.acos(0.5);
+ * // returns 1.0471975511965979
+ */
+
+/**
+ * Math.asin(x) returns the arcsine of x, in radians.
+ * @see {@link https://www.w3schools.com/jsref/jsref_asin.asp}
+ * @access public
+ * @function
+ * @name Math.asin
+ * @param {number} x
+ * @returns {number}
+ * @example Math.asin(0.5);
+ * // returns 0.5235987755982989
+ */
+
+/**
+ * Math.atan(x) returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians.
+ * @see {@link https://www.w3schools.com/jsref/jsref_atan.asp}
+ * @access public
+ * @function
+ * @name Math.atan
+ * @param {number} x
+ * @returns {number}
+ * @example Math.atan(0.5);
+ * // returns 0.4636476090008061
+ */
+
+/**
+ * Math.atan2(y, x) returns the arctangent of the quotient of its arguments.
+ * @see {@link https://www.w3schools.com/jsref/jsref_atan2.asp}
+ * @access public
+ * @function
+ * @name Math.atan2
+ * @param {number} x
+ * @param {number} y
+ * @returns {number}
+ * @example Math.atan2(0.5,2);
+ * // returns 0.24497866312686414
+ */
+
+/**
+ * Math.ceil(x) returns the value of x rounded up to its nearest integer.
+ * @see {@link https://www.w3schools.com/jsref/jsref_ceil.asp}
+ * @access public
+ * @function
+ * @name Math.ceil
+ * @param {number} x
+ * @returns {number}
+ * @example Math.ceil(4.7);
+ * // returns 5
+ */
+
+/**
+ * Math.cos(x) returns the cosine of x (x is in radians).
+ * @see {@link https://www.w3schools.com/jsref/jsref_cos.asp}
+ * @access public
+ * @function
+ * @name Math.cos
+ * @param {number} x
+ * @returns {number}
+ * @example Math.cos(1);
+ * // returns 0.5403023058681398
+ */
+
+/**
+ * Math.exp(x) returns the value of Ex.
+ * @see {@link https://www.w3schools.com/jsref/jsref_exp.asp}
+ * @access public
+ * @function
+ * @name Math.exp
+ * @param {number} x
+ * @returns {number}
+ * @example Math.exp(3);
+ * // returns 20.085536923187668
+ */
+
+/**
+ * Math.floor(x) returns the value of x rounded down to its nearest integer.
+ * @see {@link https://www.w3schools.com/jsref/jsref_floor.asp}
+ * @access public
+ * @function
+ * @name Math.floor
+ * @param {number} x
+ * @returns {number}
+ * @example Math.floor(4.7);
+ * // returns 4
+ */
+
+/**
+ * Math.log(x) returns the natural logarithm (base E) of x.
+ * @see {@link https://www.w3schools.com/jsref/jsref_log.asp}
+ * @access public
+ * @function
+ * @name Math.log
+ * @param {number} x
+ * @returns {number}
+ * @example Math.log(4.7);
+ * // returns 1.547562508716013
+ */
+
+/**
+ * Math.max(x, y, z, ..., n) returns the number with the highest value.
+ * @see {@link https://www.w3schools.com/jsref/jsref_max.asp}
+ * @access public
+ * @function
+ * @name Math.max
+ * @param {number} x
+ * @returns {number}
+ * @example Math.max(0, 150, 30, 20, -8, -200);
+ * // returns 150
+ */
+
+/**
+ * Math.min(x, y, z, ..., n) returns the number with the lowest value.
+ * @see {@link https://www.w3schools.com/jsref/jsref_min.asp}
+ * @access public
+ * @function
+ * @name Math.min
+ * @param {number} x
+ * @returns {number}
+ * @example Math.min(0, 150, 30, 20, -8, -200);
+ * // returns -200
+ */
+
+/**
+ * Math.pow(x, y) returns the value of x to the power of y.
+ * @see {@link https://www.w3schools.com/jsref/jsref_pow.asp}
+ * @access public
+ * @function
+ * @name Math.pow
+ * @param {number} x
+ * @param {number} y
+ * @returns {number}
+ * @example Math.pow(3,2);
+ * // returns 9
+ */
+
+/**
+ * Math.round(x) returns the value of x rounded to its nearest integer.
+ * @see {@link https://www.w3schools.com/jsref/jsref_round.asp}
+ * @access public
+ * @function
+ * @name Math.round
+ * @param {number} x
+ * @returns {number}
+ * @example Math.round(4.7);
+ * // returns 5
+ * // Math.round(4.4);
+ * // returns 4
+ */
+
+/**
+ * Math.sin(x) returns the sine of x (x is in radians).
+ * @see {@link https://www.w3schools.com/jsref/jsref_sin.asp}
+ * @access public
+ * @name Math.sin
+ * @param {number} x
+ * @returns {number}
+ * @example Math.sin(1);
+ * // returns 0.8414709848078965
+ */
+
+/**
+ * Math.sqrt(x) returns the square root of x.
+ * @see {@link https://www.w3schools.com/jsref/jsref_sqrt.asp}
+ * @access public
+ * @function
+ * @name Math.sqrt
+ * @param {number} x
+ * @returns {number}
+ * @example Math.sqrt(2);
+ * // returns 1.4142135623730951
+ */
+
+/**
+ * Math.tan(x) returns the tangent of an angle.
+ * @see {@link https://www.w3schools.com/jsref/jsref_tan.asp}
+ * @access public
+ * @function
+ * @name Math.tan
+ * @param {number} x
+ * @returns {number}
+ * @example Math.tan(1);
+ * // returns 1.5574077246549023
+ */
+
+/**
+ * Euler's number (approx. 2.718).
+ * @see {@link https://www.w3schools.com/jsref/jsref_e.asp}
+ * @access public
+ * @constant
+ * @name Math.E
+ * @returns {number} 2.718281828459045
+ * @example Math.E;
+ * // returns 2.718281828459045
+ */
+
+/**
+ * Natural logarithm of 2 (approx. 0.693).
+ * @see {@link https://www.w3schools.com/jsref/jsref_ln2.asp}
+ * @access public
+ * @constant
+ * @name Math.LN2
+ * @returns {number} 0.6931471805599453
+ * @example Math.LN2;
+ * // returns 0.6931471805599453
+ */
+
+/**
+ * Natural logarithm of 10 (approx. 2.302).
+ * @see {@link https://www.w3schools.com/jsref/jsref_ln10.asp}
+ * @access public
+ * @constant
+ * @name Math.LN10
+ * @returns {number} 2.302585092994046
+ * @example Math.LN10;
+ * // returns 2.302585092994046
+ */
+
+/**
+ * Base-2 logarithm of E (approx. 1.442).
+ * @see {@link https://www.w3schools.com/jsref/jsref_log2e.asp}
+ * @access public
+ * @constant
+ * @name Math.LOG2E
+ * @returns {number} 1.4426950408889634
+ * @example Math.LOG2E;
+ * // returns 1.4426950408889634
+ */
+
+/**
+ * Base-10 logarithm of E (approx. 0.434).
+ * @see {@link https://www.w3schools.com/jsref/jsref_log10e.asp}
+ * @access public
+ * @constant
+ * @name Math.LOG10E
+ * @returns {number} 0.4342944819032518
+ * @example Math.LOG10E;
+ * // returns 0.4342944819032518
+ */
+
+/**
+ * PI (approx. 3.14)
+ * @see {@link https://www.w3schools.com/jsref/jsref_pi.asp}
+ * @access public
+ * @constant
+ * @name Math.PI
+ * @returns {number} 3.141592653589793
+ * @example Math.PI;
+ * // returns 3.141592653589793
+ */
+
+/**
+ * Square root of 1/2 (approx. 0.707).
+ * @see {@link https://www.w3schools.com/jsref/jsref_sqrt1_2.asp}
+ * @access public
+ * @constant
+ * @name Math.SQRT1_2
+ * @returns {number} 0.7071067811865476
+ * @example Math.SQRT1_2;
+ * // returns 0.7071067811865476
+ */
+
+/**
+ * Square root of 2 (approx. 1.414).
+ * @see {@link https://www.w3schools.com/jsref/jsref_sqrt2.asp}
+ * @access public
+ * @constant
+ * @name Math.SQRT2
+ * @returns {number} 1.4142135623730951
+ * @example Math.SQRT2;
+ * // returns 1.4142135623730951
+ */
+
+/**
+ * Random number
+ * @see {@link https://www.w3schools.com/jsref/jsref_random.asp}
+ * @access public
+ * @function
+ * @name Math.random
+ * @returns {number} between 0 and 1
+ * @example Math.random();
+ * // returns a random number
+ */// Script modified based of the calculator found on http://statpages.info/nonlin.html
 
 /**
  * Function to perform a non-linear regression.
@@ -1211,10 +2221,10 @@ function NonLinearRegression(data, options) {
  * The function transforms a given array by providing a second same length array, or a single number.
  * @access public
  * @function
- * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs')} fn Available functions to transform the input array.
+ * @param {('add'|'subtract'|'multiply'|'divide'|'+'|'-'|'*'|'/'|'normToMin'|'normToMax'|'normToRange'|'normToIdx'|'normToVal'|'ma'|'sgf'|'abs'|'absorbance'|'absolute')} fn Available functions to transform the input array.
  * @param {number[]} a1 Input array.
  * @param {number|number[]} [a2] Second array or single number
- * @returns {number[]|void} Transformed array or null
+ * @returns {number[]|string|void} Transformed array, a string with an error message or null
  * @example TransformTrace('subtract', [1, 2, 3, 4], [0, 1, 2, 1]);
  * // returns [1, 1, 1, 3]
  *
@@ -1244,38 +2254,80 @@ function NonLinearRegression(data, options) {
  * TransformTrace('ma', [1.5, 2, 3, 4]);
  * // returns [1.6667, 2.1665, 3, 3.6665]
  *
- * TransformTrace('sgf', [1, 2, 3, 4]);
- * // returns [6, 7, 8, 9]
+ * TransformTrace('sgf', [1,2,3,4,3,2,1,1]);
+ * // returns [1.3333333333333333,1.9523809523809523]
  *
  * // Absorbance (abs) -log(I/I0)
  *
  * // In case no value is provided, I0 is the fist value from the array
  * TransformTrace('abs', [1.5, 2, 3, 4]);
  * // returns [-0, -0.12494, -0.30103, -0.42597]
+ * 
+ * TransformTrace('absorbance', [1.5, 2, 3, 4]);
+ * // returns [-0, -0.12494, -0.30103, -0.42597]
  *
  * // The provided value is I0
  * TransformTrace('abs', [1.5, 2, 3, 4], 1);
  * // returns [-0.1761, -0.3010, -0.4771, -0.6021]
+ * 
+ * // Absolute numbers
+ * TransformTrace('absolute', [1, -2, 3, -4]);
+ * // returns [1, 2, 3, 4]
+ * 
  */
 
 function TransformTrace( fn, a1, a2 ) {
 
     // Available functions for transformation
-    var fns = ['add','subtract','multiply','divide','+','-','*','/','normToMin','normToMax','normToRange','normToIdx','normToVal','ma','sgf','abs'];
+    var fns = ['add','subtract','multiply','divide','+','-','*','/','normToMin','normToMax','normToRange','normToIdx','normToVal','ma','sgf','abs', 'absorbance', 'absolute'];
     var trace = [];
     var issue = null;
 
-    // Making sure user input meets minimum requirements
-    if( fn === undefined || fns.indexOf(fn) == -1 || a1 === undefined || !Array.isArray(a1) )
-        return 'Unknown Function';
+    // Making sure, the transformation method is available
+    if( fn === undefined || fns.indexOf(fn) == -1)
+        return 'Unknown Transformation';
 
-    // Making sure input for a2 is a valid array
-    if( a2 !== undefined && Array.isArray(a2) && a1.length != a2.length )
-        return 'Arrays have different sizes (a1 = '+a1.length+', a2 = '+a2.length+')';
+    // Making sure the array to transform is an array
+    else if( a1 === undefined || !Array.isArray(a1) )
+        return 'Second parameter needs to be a number array';
+    
+    // Making sure the provided array is a number array
+    else if( a1.findIndex(function(x){ return !Number(x);}) > -1 )
+        return 'Provided array contains elements other than numbers';
 
-    // Making sure input for a2 is a number otherwise
-    else if( a2 !== undefined && !Array.isArray(a2) && typeof a2 != 'number' )
-        return 'Input for third parameter needs to be an array or number';
+    // Making sure, transformations with two parameters have correct inputs
+    else if( ['add','subtract','multiply','divide','+','-','*','/'].indexOf(fn) > -1 ){
+        
+        // Second parameter needs to be a number or number array
+        if( a2 === undefined || !Array.isArray(a2) && typeof a2 != 'number' )
+            return 'Input for second parameter needs to be a number array or number';
+        
+            // Provided arrays have different sizes
+        else if( Array.isArray(a2) && a1.length != a2.length )
+            return 'Provided arrays have different sizes (a1 = '+a1.length+', a2 = '+a2.length+')';
+        
+            // Provided second array is not a number array
+        else if( Array.isArray(a2) && a2.findIndex(function(x){ return !Number(x);}) > -1 )
+            return 'The second array contains elements other than numbers';
+    }
+
+    // Making sure, transformations with number required as second parameter are not receiving arrays
+    else if( ['normToIdx','normToVal'].indexOf(fn) > -1 && typeof a2 != 'number' )
+        return 'This transformation requires the second parameter to be a number';
+
+    // Making sure, absorbance transformation has a number or no parameter
+    else if( ['abs','absorbance'].indexOf(fn) > -1 ) {
+        if( a2 !== undefined && typeof a2 != 'number' )
+            return 'This transformation requires the second parameter to be a number or left empty';
+    }
+
+    // Making sure, transformations with only one input are not returning an array with [undefined]
+    else if( ['normToMin','normToMax','normToRange','ma','sgf','absolute'].indexOf(fn) > -1 && a2 !== undefined )
+        return 'This transformation only allows one input parameter';
+
+    // Make sure, the array to transform has a minimum length
+    else if( ['sgf'].indexOf(fn) > -1 && a1.length <= 6 )
+        return 'Array has to have a minimum length of 7 elements';
 
     if(typeof a2 == 'number'){
         trace = a1.map(function(a){
@@ -1294,7 +2346,7 @@ function TransformTrace( fn, a1, a2 ) {
             if(fn == 'normToIdx'){
                 return a / a1[a2];
             }
-            if(fn == 'abs'){
+            if(fn == 'abs' || fn == 'absorbance'){
                 return ( - Math.log( ( a / a2) ) / Math.LN10 );
             }
         });
@@ -1352,1060 +2404,39 @@ function TransformTrace( fn, a1, a2 ) {
             trace = tmp;
         }
 
-        if(fn == 'abs'){
-            for (var i in a1)
-                trace.push( ( - Math.log( (a1[i] / a1[0]) ) / Math.LN10 ) );
+        if(fn == 'abs' || fn == 'absorbance'){
+            trace = a1.map(function(a,i,arr){
+                return ( - Math.log( (a / arr[0]) ) / Math.LN10 );
+            });
         }
-    }
 
-    else if(typeof a2 == 'string'){
-        trace = a1.map(function(a){
-            if(fn == 'add' || fn == '+'){
-                return a + a2;
-            }
-            if(fn == 'subtract' || fn == '-'){
-                return a - a2;
-            }
-            if(fn == 'multiply' || fn == '*'){
-                return a * a2;
-            }
-            if(fn == 'divide' || fn == '/'){
-                return a / a2;
-            }
-        });
+        if(fn == 'absolute'){
+            trace = a1.map(function(a){
+                return Math.abs(a);
+            });
+        }
+
     }
 
     else if( Array.isArray(a2) ){
-        for(var i in a1){
+        trace = a1.map(function(a,idx){
             if(fn == 'add' || fn == '+'){
-                trace.push( a1[i] + a2[i] );
+                return a + a2[idx];
             }
             if(fn == 'subtract' || fn == '-'){
-                trace.push( a1[i] - a2[i] );
+                return a - a2[idx];
             }
-            if(fn == 'multiply' || fn == '-'){
-                trace.push( a1[i] * a2[i] );
+            if(fn == 'multiply' || fn == '*'){
+                return a * a2[idx];
             }
             if(fn == 'divide' || fn == '/'){
-                trace.push( a1[i] / a2[i] );
+                return a / a2[idx];
             }
-        }
+        });
     }
-
     else{
         return null;
     }
 
     return issue ? null : trace;
 }
-// Functions as shown below have been developed based of Numeric or
-// taken from Numeric (https://github.com/sloisel/numeric). See the
-// licence in ./rescources/Numeric-LICENCE.md
-
-/**
- * Multiple Linear Regression
- * @access public
- * @function
- * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
- * @returns {object} Returns rsquared, slopes and points.
- * @example MathEXPINVREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ] );
- * // returns
- * {
- *   "rsquared": rSq,
- *   "slopes": [slope1, ...],
- *   "points": [ [x1, x2, ..., xn], [y1, y2, ..., yn] ]
- * }
- */
-function MathMULTREG(input_raw) {
-
-	if(input_raw === undefined || !Array.isArray( input_raw ))
-        return null;
-
-	//do some basic transforms on the data to get it to useable form
-	var numPredictors = input_raw[0].length - 1;
-	var input = [];
-
-	for (var i = 0; i < input_raw[0].length; i++) {
-		var temp = [];
-		for (var j = 0; j < input_raw.length; j++) {
-			temp.push(input_raw[j][i]);
-		}
-		input.push(temp);
-	}
-
-
-	var x = [];
-	var ones = [];
-	for (i = 0; i < input[0].length; i++) {
-		ones.push(1);
-	}
-
-	x.push(ones);
-	var retX = [];
-	for (i = 0; i < numPredictors; i++) {
-		x.push(input[i]);
-		retX.push(input[i]);
-	}
-
-	var y = input[numPredictors];
-
-	//do the actual fit
-	x = transpose(x);
-
-	var qr = QRDecomp(x);
-
-	var results = dot(inv(qr.R), dot(transpose(qr.Q), y));
-
-	//calculate the rsquared value
-	var sum = 0;
-	for (i = 0; i < y.length; i++) {
-		sum += y[i];
-	}
-
-	var responseAvg = sum / y.length;
-
-	var yHat = [];
-
-	for (i = 0; i < y.length; i++) {
-		var yTemp = 0;
-		for (j = 0; j < numPredictors; j++) {
-			yTemp += results[j + 1] * x[i][j + 1];
-		}
-		yTemp += results[0];
-		yHat.push(yTemp);
-	}
-
-	var SSM = 0;
-	var SSTO = 0;
-
-	for (i = 0; i < y.length; i++) {
-		SSM += ((yHat[i] - responseAvg) * (yHat[i] - responseAvg));
-		SSTO += ((y[i] - responseAvg) * (y[i] - responseAvg));
-	}
-
-	var rSq = SSM / SSTO;
-
-	return {
-		"rsquared": rSq,
-		"slopes": results,
-		"points": [retX, yHat]
-	};
-
-}
-
-/**
- * Fit exponential decay to Y = Y0 + Ae^(-x/t)
- * A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.
- * @access public
- * @function
- * @param {array[]} input_raw Input x,y value pairs [ [x1,y1], [x2,y2], ..., [xn,yn] ].
- * @returns {object} Results from fit including points, values for A and t, error, asymptote, rsquared, lifetime, slope.
- * @example MathEXPINVREG( [ [x1,y1], [x2,y2], ..., [xn,yn] ] );
- * // returns
- * {
- *   "points": [ [x1,y1], [x2,y2], ..., [xn,yn] ],
- * 	 "results": [A, t],
- * 	 "error": yError,
- *   "asymptote": asymptote,
- *   "rsquared": linReg.rsquared,
- *   "lifetime": lifetime,
- * 	 "slope": slope
- * }
- */
-function MathEXPINVREG(input_raw) {
-
-	if(input_raw === undefined || !Array.isArray( input_raw ))
-        return null;
-
-	//calculate the approximate asymptote
-	var y = [];
-	for (i = 0; i < input_raw.length; i++) {
-		y.push(input_raw[i][1]);
-	}
-
-	//trapezoidal riemann sum assuming spaced evenly
-	var riemann = 0;
-	var riemannSq = 0;
-	for (i = 0; i < y.length - 1; i++) {
-		temp = (y[i] + y[i + 1]) / 2;
-		riemann += temp;
-		temp = (Math.pow(y[i], 2) + Math.pow(y[i + 1], 2)) / 2;
-		riemannSq += temp;
-	}
-
-	var asymptote = (riemannSq - riemann * (y[0] + y[y.length - 1]) / 2) /
-		(riemann - y.length * (y[0] + y[y.length - 1]) / 2);
-
-	//calculate with linear regression on the linear equation ln(Y) = ln(A) - x/t
-	var input_transformed = clone(input_raw);
-	for (var i = 0; i < input_raw.length; i++) {
-		temp = input_raw[i][1] - asymptote;
-		if (temp < 0) {
-			temp = -1 * temp;
-		}
-		input_transformed[i][1] = MathLN(temp);
-	}
-
-
-
-	var constants = [0.5];
-
-	var t2 = 50;
-	var t2_old;
-	var t, A;
-	for (i = 0; i < 10; i++) {
-
-		if (t2 < 2) {
-			t = -999999;
-			A = 0;
-			break;
-		}
-
-		t2_old = t2;
-		var linReg = MathMULTREG(input_transformed.slice(0, t2));
-
-		t2 = MathROUND((-1 / linReg.slopes[1]) * constants[0], 0);
-		if (i == 9) {
-			t2 = (t2 > t2_old) ? t2 : t2_old;
-			linReg = MathMULTREG(input_transformed.slice(0, t2));
-		}
-
-		t = linReg.slopes[1];
-		A = Math.pow(Math.E, linReg.slopes[0]);
-
-	}
-
-
-
-	var points = [];
-	for (i = 0; i < input_raw.length; i++) {
-		var temp = [];
-		temp.push(input_raw[i][0]);
-		temp.push(A * Math.pow(Math.E, input_raw[i][0] * t) + asymptote);
-		points.push(temp);
-	}
-
-	var yError = 0;
-	for (i = 0; i < input_raw.length; i++) {
-		yError += Math.pow(A * Math.pow(Math.E, input_raw[i][0] * t) - input_raw[i][1] + asymptote, 2);
-	}
-
-	yError /= input_raw.length - 1;
-
-	var lifetime = (-1 / t);
-	var slope = -1 * A * t;
-
-	return {
-		points: points,
-		results: [A, t],
-		error: yError,
-		asymptote: asymptote,
-		rsquared: linReg.rsquared,
-		lifetime: lifetime,
-		slope: slope
-	};
-}
-
-/**
- * Polynomial fit to y = a0 + a1x + a2x^2 + a3x^3....
- * @access public
- * @function
- * @param {array[]} input_raw Array of x,y value pairs arrays [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ]
- * @param {degree} size degree.
- * @returns {object} Returns points, slopes and error
- * @example MathPOLYREG( [ [ [x1,y1], [x2,y2], ..., [xn,yn] ], [ [x1,y1], [x2,y2], ..., [xn,yn] ] ], degree );
- * // returns
- * {
- *   "points": points,
- *   "slopes": slopes,
- *   "error": yError
- * }
- */
-function MathPOLYREG(input_raw, degree) {
-	var transformed_nums = [];
-	for (var i = 0; i < input_raw.length; i++) {
-		var temp = [];
-		for (var j = 1; j < degree + 1; j++) {
-			temp.push(Math.pow(input_raw[i][0], j))
-		}
-		temp.push(input_raw[i][1]);
-		transformed_nums.push(temp);
-	}
-
-	var polyReg = MathMULTREG(transformed_nums);
-
-	var slopes = polyReg.slopes;
-
-	var points = [];
-	var yError = 0;
-	for (i = 0; i < input_raw.length; i++) {
-		temp = [];
-		var yHat = 0;
-		temp.push(input_raw[i][0]);
-		for (j = 0; j < degree + 1; j++) {
-			yHat += (Math.pow(input_raw[i][0], degree) * slopes[j]);
-		}
-		temp.push(yHat);
-		points.push(temp);
-
-		yError += Math.pow((yHat - input_raw[i][1]), 2);
-	}
-
-	yError /= input_raw.length - 1;
-
-	return {
-		"points": points,
-		"slopes": slopes,
-		"error": yError
-	};
-
-}
-
-// helper functions for the functions above
-
-//intended for vectors of equal size
-function subVV(vec1, vec2) {
-	var ret = [];
-	for (var i = 0; i < vec1.length; i++) {
-		ret.push(vec1[i] - vec2[i]);
-	}
-
-	return ret;
-}
-
-function proj(vec1, vec2) {
-	var denom = innerProd(vec1, vec1);
-	var numer = innerProd(vec1, vec2);
-
-	var vec3 = [];
-
-	for (var i = 0; i < vec1.length; i++) {
-		vec3[i] = (numer / denom) * vec1[i];
-	}
-
-	return vec3;
-}
-
-function innerProd(vec1, vec2) {
-	if (vec1.length == vec2.length) {
-		var ans = 0;
-		for (var i = 0; i < vec1.length; i++) {
-			ans += vec1[i] * vec2[i];
-		}
-
-		return ans;
-	}
-}
-
-function normal(vec) {
-	var norm = 0;
-	for (var i = 0; i < vec.length; i++) {
-		norm += vec[i] * vec[i];
-	}
-	norm = Math.sqrt(norm);
-
-	return norm;
-}
-
-//source: http://www.learninglover.com/examples.php?id=79
-function QRDecomp(A) {
-	var aVectors = transpose(A);
-	var uVector = [];
-	var eVector = [];
-	var eVectorTxt = [];
-	var sum = [];
-
-	var testTest = [];
-
-	for (var i = 0; i < aVectors.length; i++) {
-		uVector[i] = [];
-		for (var j = 0; j < aVectors[i].length; j++) {
-			sum[j] = 0;
-		}
-
-		for (j = 0; j < i; j++) {
-			var temp = proj(eVector[j], aVectors[i]);
-			for (k = 0; k < temp.length; k++) {
-				sum[k] += temp[k];
-			}
-		}
-
-		for (j = 0; j < aVectors[i].length; j++) {
-			uVector[i][j] = aVectors[i][j] - sum[j];
-		}
-
-		var norm = normal(uVector[i]);
-
-		eVector[i] = [];
-		eVectorTxt[i] = [];
-
-		for (j = 0; j < aVectors[i].length; j++) {
-			eVector[i][j] = uVector[i][j] / norm;
-			eVectorTxt[i][j] = uVector[i][j] + " / " + norm;
-		}
-
-
-	}
-
-	for (i = 0; i < aVectors.length; i++) {
-		testTest[i] = [];
-		for (j = 0; j < aVectors[i].length; j++) {
-			testTest[i][j] = 0;
-		}
-
-		for (j = 0; j <= i; j++) {
-			var tempVec = innerProd(aVectors[i], eVector[j]);
-
-			for (var k = 0; k < eVector[i].length; k++) {
-				testTest[i][k] += eVector[j][k] * tempVec;
-			}
-		}
-
-
-	}
-
-	eVector = transpose(eVector);
-	eVectorTxt = transpose(eVectorTxt);
-	var decomp = {};
-	decomp.Q = [];
-
-	for (i = 0; i < eVector.length; i++) {
-		decomp.Q[i] = eVectorTxt[i];
-	}
-
-	for (i = 0; i < eVector.length; i++) {
-		decomp.Q[i] = eVector[i];
-	}
-
-	decomp.R = dot(transpose(decomp.Q), A);
-
-	return decomp;
-}
-
-//helper from numeric.js library
-function transpose(x) {
-	var i, j, m = x.length,
-		n = x[0].length,
-		ret = new Array(n),
-		A0, A1, Bj;
-	for (j = 0; j < n; j++) ret[j] = new Array(m);
-	for (i = m - 1; i >= 1; i -= 2) {
-		A1 = x[i];
-		A0 = x[i - 1];
-		for (j = n - 1; j >= 1; --j) {
-			Bj = ret[j];
-			Bj[i] = A1[j];
-			Bj[i - 1] = A0[j];
-			--j;
-			Bj = ret[j];
-			Bj[i] = A1[j];
-			Bj[i - 1] = A0[j];
-		}
-		if (j === 0) {
-			Bj = ret[0];
-			Bj[i] = A1[0];
-			Bj[i - 1] = A0[0];
-		}
-	}
-	if (i === 0) {
-		A0 = x[0];
-		for (j = n - 1; j >= 1; --j) {
-			ret[j][0] = A0[j];
-			--j;
-			ret[j][0] = A0[j];
-		}
-		if (j === 0) {
-			ret[0][0] = A0[0];
-		}
-	}
-	return ret;
-}
-
-function _getCol(A, j, x) {
-	var n = A.length,
-		i;
-	for (i = n - 1; i > 0; --i) {
-		x[i] = A[i][j];
-		--i;
-		x[i] = A[i][j];
-	}
-	if (i === 0) x[0] = A[0][j];
-}
-
-function dotVV(x, y) {
-	var i, n = x.length,
-		i1, ret = x[n - 1] * y[n - 1];
-	for (i = n - 2; i >= 1; i -= 2) {
-		i1 = i - 1;
-		ret += x[i] * y[i] + x[i1] * y[i1];
-	}
-	if (i === 0) {
-		ret += x[0] * y[0];
-	}
-	return ret;
-}
-
-function dotMMbig(x, y) {
-	var gc = _getCol,
-		p = y.length,
-		v = new Array(p);
-	var m = x.length,
-		n = y[0].length,
-		A = new Array(m),
-		xj;
-	var VV = dotVV;
-	var i, j;
-	--p;
-	--m;
-	for (i = m; i !== -1; --i) A[i] = new Array(n);
-	--n;
-
-	for (i = n; i !== -1; --i) {
-		gc(y, i, v);
-		for (j = m; j !== -1; --j) {
-			xj = x[j];
-			A[j][i] = VV(xj, v);
-		}
-	}
-
-	return A;
-}
-
-function _dim(x) {
-	var ret = [];
-	while (typeof x === "object") {
-		ret.push(x.length);
-		x = x[0];
-	}
-	return ret;
-}
-
-function dim(x) {
-	var y, z;
-	if (typeof x === "object") {
-		y = x[0];
-		if (typeof y === "object") {
-			z = y[0];
-			if (typeof z === "object") {
-				return _dim(x);
-			}
-			return [x.length, y.length];
-		}
-		return [x.length];
-	}
-	return [];
-}
-
-function clone(input) {
-	var ret = [];
-	for (var i = 0; i < input.length; i++) {
-		var temp = [];
-		for (var j = 0; j < input[0].length; j++) {
-			temp.push(input[i][j]);
-		}
-		ret.push(temp);
-	}
-
-	return ret;
-}
-
-function diag(d) {
-	var i, i1, j, n = d.length,
-		A = new Array(n),
-		Ai;
-	for (i = n - 1; i >= 0; i--) {
-		Ai = new Array(n);
-		i1 = i + 2;
-		for (j = n - 1; j >= i1; j -= 2) {
-			Ai[j] = 0;
-			Ai[j - 1] = 0;
-		}
-		if (j > i) {
-			Ai[j] = 0;
-		}
-		Ai[i] = d[i];
-		for (j = i - 1; j >= 1; j -= 2) {
-			Ai[j] = 0;
-			Ai[j - 1] = 0;
-		}
-		if (j === 0) {
-			Ai[0] = 0;
-		}
-		A[i] = Ai;
-	}
-	return A;
-}
-
-function rep(s, v, k) {
-	if (typeof k === "undefined") {
-		k = 0;
-	}
-	var n = s[k],
-		ret = new Array(n),
-		i;
-	if (k === s.length - 1) {
-		for (i = n - 2; i >= 0; i -= 2) {
-			ret[i + 1] = v;
-			ret[i] = v;
-		}
-		if (i === -1) {
-			ret[0] = v;
-		}
-		return ret;
-	}
-	for (i = n - 1; i >= 0; i--) {
-		ret[i] = rep(s, v, k + 1);
-	}
-	return ret;
-}
-
-function identity(n) {
-	return diag(rep([n], 1));
-}
-
-function inv(x) {
-	var s = dim(x),
-		abs = Math.abs,
-		m = s[0],
-		n = s[1];
-	var A = clone(x),
-		Ai, Aj;
-	var I = identity(m),
-		Ii, Ij;
-	var i, j, k;
-	for (j = 0; j < n; ++j) {
-		var i0 = -1;
-		var v0 = -1;
-		for (i = j; i !== m; ++i) {
-			k = abs(A[i][j]);
-			if (k > v0) {
-				i0 = i;
-				v0 = k;
-			}
-		}
-		Aj = A[i0];
-		A[i0] = A[j];
-		A[j] = Aj;
-		Ij = I[i0];
-		I[i0] = I[j];
-		I[j] = Ij;
-		x = Aj[j];
-		for (k = j; k !== n; ++k) Aj[k] /= x;
-		for (k = n - 1; k !== -1; --k) Ij[k] /= x;
-		for (i = m - 1; i !== -1; --i) {
-			if (i !== j) {
-				Ai = A[i];
-				Ii = I[i];
-				x = Ai[j];
-				for (k = j + 1; k !== n; ++k) Ai[k] -= Aj[k] * x;
-				for (k = n - 1; k > 0; --k) {
-					Ii[k] -= Ij[k] * x;
-					--k;
-					Ii[k] -= Ij[k] * x;
-				}
-				if (k === 0) Ii[0] -= Ij[0] * x;
-			}
-		}
-	}
-	return I;
-}
-
-function dotMV(x, y) {
-	var p = x.length,
-		i;
-	var ret = new Array(p);
-	var VV = dotVV;
-	for (i = p - 1; i >= 0; i--) {
-		ret[i] = VV(x[i], y);
-	}
-	return ret;
-}
-
-function dotVM(x, y) {
-	var j, k, p, q, ret, woo, i0;
-	p = x.length;
-	q = y[0].length;
-	ret = new Array(q);
-	for (k = q - 1; k >= 0; k--) {
-		woo = x[p - 1] * y[p - 1][k];
-		for (j = p - 2; j >= 1; j -= 2) {
-			i0 = j - 1;
-			woo += x[j] * y[j][k] + x[i0] * y[i0][k];
-		}
-		if (j === 0) {
-			woo += x[0] * y[0][k];
-		}
-		ret[k] = woo;
-	}
-	return ret;
-}
-
-function dotMMsmall(x, y) {
-	var i, j, k, p, q, r, ret, foo, bar, woo, i0;
-	p = x.length;
-	q = y.length;
-	r = y[0].length;
-	ret = new Array(p);
-	for (i = p - 1; i >= 0; i--) {
-		foo = new Array(r);
-		bar = x[i];
-		for (k = r - 1; k >= 0; k--) {
-			woo = bar[q - 1] * y[q - 1][k];
-			for (j = q - 2; j >= 1; j -= 2) {
-				i0 = j - 1;
-				woo += bar[j] * y[j][k] + bar[i0] * y[i0][k];
-			}
-			if (j === 0) {
-				woo += bar[0] * y[0][k];
-			}
-			foo[k] = woo;
-		}
-		ret[i] = foo;
-	}
-	return ret;
-}
-
-function mulVS(x, y) {
-	for (var i = 0; i < x.length; i++) {
-		x[i] = x[i] * y;
-	}
-
-	return x;
-}
-
-function mulSV(x, y) {
-	for (var i = 0; i < y.length; i++) {
-		y[i] = y[i] * x;
-	}
-
-	return y;
-}
-
-function dot(x, y) {
-	var d = dim;
-	switch (d(x).length * 1000 + d(y).length) {
-		case 2002:
-			if (y.length < 10) return dotMMsmall(x, y);
-			else return dotMMbig(x, y);
-		case 2001:
-			return dotMV(x, y);
-		case 1002:
-			return dotVM(x, y);
-		case 1001:
-			return dotVV(x, y);
-		case 1000:
-			return mulVS(x, y);
-		case 1:
-			return mulSV(x, y);
-		case 0:
-			return x * y;
-		default:
-			throw new Error('numeric.dot only works on vectors and matrices');
-	}
-}/**
- * Math.abs(x) returns the absolute value of x.
- * @see {@link https://www.w3schools.com/jsref/jsref_abs.asp}
- * @access public
- * @function
- * @name Math.abs
- * @param {number} x
- * @returns {number}
- * @example Math.abs(4.7);
- * // returns 5
- * Math.abs(4.4);
- * // returns 4;
- */
-
-/**
- * Math.acos(x) returns the arccosine of x, in radians.
- * @see {@link https://www.w3schools.com/jsref/jsref_acos.asp}
- * @access public
- * @function
- * @name Math.acos
- * @param {number} x
- * @returns {number}
- * @example Math.acos(0.5);
- * // returns 1.0471975511965979
- */
-
-/**
- * Math.asin(x) returns the arcsine of x, in radians.
- * @see {@link https://www.w3schools.com/jsref/jsref_asin.asp}
- * @access public
- * @function
- * @name Math.asin
- * @param {number} x
- * @returns {number}
- * @example Math.asin(0.5);
- * // returns 0.5235987755982989
- */
-
-/**
- * Math.atan(x) returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians.
- * @see {@link https://www.w3schools.com/jsref/jsref_atan.asp}
- * @access public
- * @function
- * @name Math.atan
- * @param {number} x
- * @returns {number}
- * @example Math.atan(0.5);
- * // returns 0.4636476090008061
- */
-
-/**
- * Math.atan2(y, x) returns the arctangent of the quotient of its arguments.
- * @see {@link https://www.w3schools.com/jsref/jsref_atan2.asp}
- * @access public
- * @function
- * @name Math.atan2
- * @param {number} x
- * @param {number} y
- * @returns {number}
- * @example Math.atan2(0.5,2);
- * // returns 0.24497866312686414
- */
-
-/**
- * Math.ceil(x) returns the value of x rounded up to its nearest integer.
- * @see {@link https://www.w3schools.com/jsref/jsref_ceil.asp}
- * @access public
- * @function
- * @name Math.ceil
- * @param {number} x
- * @returns {number}
- * @example Math.ceil(4.7);
- * // returns 5
- */
-
-/**
- * Math.cos(x) returns the cosine of x (x is in radians).
- * @see {@link https://www.w3schools.com/jsref/jsref_cos.asp}
- * @access public
- * @function
- * @name Math.cos
- * @param {number} x
- * @returns {number}
- * @example Math.cos(1);
- * // returns 0.5403023058681398
- */
-
-/**
- * Math.exp(x) returns the value of Ex.
- * @see {@link https://www.w3schools.com/jsref/jsref_exp.asp}
- * @access public
- * @function
- * @name Math.exp
- * @param {number} x
- * @returns {number}
- * @example Math.exp(3);
- * // returns 20.085536923187668
- */
-
-/**
- * Math.floor(x) returns the value of x rounded down to its nearest integer.
- * @see {@link https://www.w3schools.com/jsref/jsref_floor.asp}
- * @access public
- * @function
- * @name Math.floor
- * @param {number} x
- * @returns {number}
- * @example Math.floor(4.7);
- * // returns 4
- */
-
-/**
- * Math.log(x) returns the natural logarithm (base E) of x.
- * @see {@link https://www.w3schools.com/jsref/jsref_log.asp}
- * @access public
- * @function
- * @name Math.log
- * @param {number} x
- * @returns {number}
- * @example Math.log(4.7);
- * // returns 1.547562508716013
- */
-
-/**
- * Math.max(x, y, z, ..., n) returns the number with the highest value.
- * @see {@link https://www.w3schools.com/jsref/jsref_max.asp}
- * @access public
- * @function
- * @name Math.max
- * @param {number} x
- * @returns {number}
- * @example Math.max(0, 150, 30, 20, -8, -200);
- * // returns 150
- */
-
-/**
- * Math.min(x, y, z, ..., n) returns the number with the lowest value.
- * @see {@link https://www.w3schools.com/jsref/jsref_min.asp}
- * @access public
- * @function
- * @name Math.min
- * @param {number} x
- * @returns {number}
- * @example Math.min(0, 150, 30, 20, -8, -200);
- * // returns -200
- */
-
-/**
- * Math.pow(x, y) returns the value of x to the power of y.
- * @see {@link https://www.w3schools.com/jsref/jsref_pow.asp}
- * @access public
- * @function
- * @name Math.pow
- * @param {number} x
- * @param {number} y
- * @returns {number}
- * @example Math.pow(3,2);
- * // returns 9
- */
-
-/**
- * Math.round(x) returns the value of x rounded to its nearest integer.
- * @see {@link https://www.w3schools.com/jsref/jsref_round.asp}
- * @access public
- * @function
- * @name Math.round
- * @param {number} x
- * @returns {number}
- * @example Math.round(4.7);
- * // returns 5
- * // Math.round(4.4);
- * // returns 4
- */
-
-/**
- * Math.sin(x) returns the sine of x (x is in radians).
- * @see {@link https://www.w3schools.com/jsref/jsref_sin.asp}
- * @access public
- * @name Math.sin
- * @param {number} x
- * @returns {number}
- * @example Math.sin(1);
- * // returns 0.8414709848078965
- */
-
-/**
- * Math.sqrt(x) returns the square root of x.
- * @see {@link https://www.w3schools.com/jsref/jsref_sqrt.asp}
- * @access public
- * @function
- * @name Math.sqrt
- * @param {number} x
- * @returns {number}
- * @example Math.sqrt(2);
- * // returns 1.4142135623730951
- */
-
-/**
- * Math.tan(x) returns the tangent of an angle.
- * @see {@link https://www.w3schools.com/jsref/jsref_tan.asp}
- * @access public
- * @function
- * @name Math.tan
- * @param {number} x
- * @returns {number}
- * @example Math.tan(1);
- * // returns 1.5574077246549023
- */
-
-/**
- * Euler's number (approx. 2.718).
- * @see {@link https://www.w3schools.com/jsref/jsref_e.asp}
- * @access public
- * @constant
- * @name Math.E
- * @returns {number} 2.718281828459045
- * @example Math.E;
- * // returns 2.718281828459045
- */
-
-/**
- * Natural logarithm of 2 (approx. 0.693).
- * @see {@link https://www.w3schools.com/jsref/jsref_ln2.asp}
- * @access public
- * @constant
- * @name Math.LN2
- * @returns {number} 0.6931471805599453
- * @example Math.LN2;
- * // returns 0.6931471805599453
- */
-
-/**
- * Natural logarithm of 10 (approx. 2.302).
- * @see {@link https://www.w3schools.com/jsref/jsref_ln10.asp}
- * @access public
- * @constant
- * @name Math.LN10
- * @returns {number} 2.302585092994046
- * @example Math.LN10;
- * // returns 2.302585092994046
- */
-
-/**
- * Base-2 logarithm of E (approx. 1.442).
- * @see {@link https://www.w3schools.com/jsref/jsref_log2e.asp}
- * @access public
- * @constant
- * @name Math.LOG2E
- * @returns {number} 1.4426950408889634
- * @example Math.LOG2E;
- * // returns 1.4426950408889634
- */
-
-/**
- * Base-10 logarithm of E (approx. 0.434).
- * @see {@link https://www.w3schools.com/jsref/jsref_log10e.asp}
- * @access public
- * @constant
- * @name Math.LOG10E
- * @returns {number} 0.4342944819032518
- * @example Math.LOG10E;
- * // returns 0.4342944819032518
- */
-
-/**
- * PI (approx. 3.14)
- * @see {@link https://www.w3schools.com/jsref/jsref_pi.asp}
- * @access public
- * @constant
- * @name Math.PI
- * @returns {number} 3.141592653589793
- * @example Math.PI;
- * // returns 3.141592653589793
- */
-
-/**
- * Square root of 1/2 (approx. 0.707).
- * @see {@link https://www.w3schools.com/jsref/jsref_sqrt1_2.asp}
- * @access public
- * @constant
- * @name Math.SQRT1_2
- * @returns {number} 0.7071067811865476
- * @example Math.SQRT1_2;
- * // returns 0.7071067811865476
- */
-
-/**
- * Square root of 2 (approx. 1.414).
- * @see {@link https://www.w3schools.com/jsref/jsref_sqrt2.asp}
- * @access public
- * @constant
- * @name Math.SQRT2
- * @returns {number} 1.4142135623730951
- * @example Math.SQRT2;
- * // returns 1.4142135623730951
- */
-
-/**
- * Random number
- * @see {@link https://www.w3schools.com/jsref/jsref_random.asp}
- * @access public
- * @function
- * @name Math.random
- * @returns {number} between 0 and 1
- * @example Math.random();
- * // returns a random number
- */
