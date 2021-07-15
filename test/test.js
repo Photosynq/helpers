@@ -196,13 +196,20 @@ for (var fn in tests) {
 			if (fn == "NonLinearRegression")
 				res = (!pq)? NonLinearRegression() : pq.NonLinearRegression();
 
-			if (fn == "TransformTrace")
-				res = (!pq)? TransformTrace() : pq.TransformTrace();
-
+			if (fn == "TransformTrace"){
+				if(test.args.length == 0)
+					res = (!pq)? TransformTrace() : pq.TransformTrace();
+				if(test.args.length == 2 )
+					res = (!pq)? TransformTrace(test.args[0]) : pq.TransformTrace(test.args[0]);
+				if(test.args.length == 2 )
+					res = (!pq)? TransformTrace(test.args[0],test.args[1]) : pq.TransformTrace(test.args[0],test.args[1]);
+				if(test.args.length == 3 )
+					res = (!pq)? TransformTrace(test.args[0],test.args[1],test.args[2]) : pq.TransformTrace(test.args[0],test.args[1],test.args[2]);
+			}
 			// Add new test to the pipeline
 			it(`expect ${expected(test.expected)} when ${JSON.stringify(test.args)} is provided.`, function () {
 				// Check if the expected and returned results are equal
-				assert.equal( seen(res), expected(test.expected) );
+				assert.strictEqual( seen(res), expected(test.expected) );
 			});
 
         });
