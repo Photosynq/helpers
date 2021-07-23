@@ -3,7 +3,8 @@
  */
 const assert = require('assert');
 const fs = require('fs');
-const tests = require('./tests.json');
+// const tests = require('./tests.json');
+const tests = require('./test-definitions.js');
 
 /** Get the test environment */
 var env;
@@ -37,14 +38,6 @@ else
 
 // Parse the expected value as string or stringified object
 function expected(value){
-	if(typeof value == 'object')
-		return JSON.stringify(value);
-	else
-		return String(value);
-}
-
-// Parse the seen value as string or stringified object
-function seen(value){
 	if(typeof value == 'object')
 		return JSON.stringify(value);
 	else
@@ -209,7 +202,7 @@ for (var fn in tests) {
 			// Add new test to the pipeline
 			it(`expect ${expected(test.expected)} when ${JSON.stringify(test.args)} is provided.`, function () {
 				// Check if the expected and returned results are equal
-				assert.strictEqual( seen(res), expected(test.expected) );
+				assert.deepStrictEqual( res, test.expected );
 			});
 
         });
