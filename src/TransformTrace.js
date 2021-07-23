@@ -73,14 +73,14 @@ function TransformTrace( fn, a1, a2 ) {
         return 'Second parameter needs to be a number array';
     
     // Making sure the provided array is a number array
-    else if( a1.findIndex(function(x){ return !Number(x);}) > -1 )
+    else if( a1.findIndex(function(x){ return typeof x !== 'number';}) > -1 )
         return 'Provided array contains elements other than numbers';
 
     // Making sure, transformations with two parameters have correct inputs
     else if( ['add','subtract','multiply','divide','+','-','*','/'].indexOf(fn) > -1 ){
         
         // Second parameter needs to be a number or number array
-        if( a2 === undefined || !Array.isArray(a2) && typeof a2 != 'number' )
+        if( a2 === undefined || !Array.isArray(a2) && typeof a2 !== 'number' )
             return 'Input for second parameter needs to be a number array or number';
         
             // Provided arrays have different sizes
@@ -88,7 +88,7 @@ function TransformTrace( fn, a1, a2 ) {
             return 'Provided arrays have different sizes (a1 = '+a1.length+', a2 = '+a2.length+')';
         
             // Provided second array is not a number array
-        else if( Array.isArray(a2) && a2.findIndex(function(x){ return !Number(x);}) > -1 )
+        else if( Array.isArray(a2) && a2.findIndex(function(x){ return typeof x !== 'number';}) > -1 )
             return 'The second array contains elements other than numbers';
     }
 
